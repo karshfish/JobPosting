@@ -1,5 +1,6 @@
-<!
-[CDATA[<x-app-layout>
+<![CDATA
+
+<x-employer-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
@@ -7,47 +8,47 @@
                 <p class="mt-1 text-sm text-gray-600">{{ __('Update your job posting details') }}</p>
             </div>
             <div class="flex items-center space-x-3">
-                <a href="{{ route('jobPosts.show', $jobPost) }}" class="inline-flex items-center px-3 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ __('Cancel') }}</a>
+                <a href="{{ route('jobs.show', $job) }}" class="inline-flex items-center px-3 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ __('Cancel') }}</a>
             </div>
         </div>
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form action="{{ route('jobPosts.update', $jobPost) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <form action="{{ route('jobs.update', $job) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                         @csrf
                         @method('PUT')
 
                         <div>
                             <x-input-label for="title" :value="__('Job Title')" />
-                            <x-text-input id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title', $jobPost->title)" placeholder="e.g. Senior Backend Developer" />
+                            <x-text-input id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title', $job->title)" placeholder="e.g. Senior Backend Developer" />
                             <x-input-error class="mt-2" :messages="$errors->get('title')" />
                         </div>
 
                         <div>
                             <x-input-label for="description" :value="__('Job Description')" />
-                            <textarea id="description" name="description" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2" placeholder="Describe the role, responsibilities and requirements">{{ old('description', $jobPost->description) }}</textarea>
+                            <textarea id="description" name="description" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2" placeholder="Describe the role, responsibilities and requirements">{{ old('description', $job->description) }}</textarea>
                             <x-input-error class="mt-2" :messages="$errors->get('description')" />
                         </div>
 
                         <div class="grid grid-cols-1 gap-4">
                             <div>
                                 <x-input-label for="category" :value="__('Category')" />
-                                <x-text-input id="category" name="category" type="text" class="mt-1 block w-full" :value="old('category', $jobPost->category)" placeholder="e.g. Engineering, Design, Marketing" />
+                                <x-text-input id="category" name="category" type="text" class="mt-1 block w-full" :value="old('category', $job->category)" placeholder="e.g. Engineering, Design, Marketing" />
                                 <x-input-error class="mt-2" :messages="$errors->get('category')" />
                             </div>
 
                             <div>
                                 <x-input-label for="responsibilities" :value="__('Responsibilities')" />
-                                <textarea id="responsibilities" name="responsibilities" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2" placeholder="List key responsibilities, one per line">{{ old('responsibilities', $jobPost->responsibilities) }}</textarea>
+                                <textarea id="responsibilities" name="responsibilities" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2" placeholder="List key responsibilities, one per line">{{ old('responsibilities', $job->responsibilities) }}</textarea>
                                 <x-input-error class="mt-2" :messages="$errors->get('responsibilities')" />
                             </div>
 
                             <div>
                                 <x-input-label for="benefits" :value="__('Benefits')" />
-                                <textarea id="benefits" name="benefits" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2" placeholder="e.g. Health insurance, Remote allowance">{{ old('benefits', $jobPost->benefits) }}</textarea>
+                                <textarea id="benefits" name="benefits" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2" placeholder="e.g. Health insurance, Remote allowance">{{ old('benefits', $job->benefits) }}</textarea>
                                 <x-input-error class="mt-2" :messages="$errors->get('benefits')" />
                             </div>
                         </div>
@@ -55,7 +56,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <x-input-label for="location" :value="__('Location')" />
-                                <x-text-input id="location" name="location" type="text" class="mt-1 block w-full" :value="old('location', $jobPost->location)" placeholder="City, Country or 'Remote'" />
+                                <x-text-input id="location" name="location" type="text" class="mt-1 block w-full" :value="old('location', $job->location)" placeholder="City, Country or 'Remote'" />
                                 <x-input-error class="mt-2" :messages="$errors->get('location')" />
                             </div>
 
@@ -63,7 +64,7 @@
                                 <x-input-label for="work_type" :value="__('Work Type')" />
                                 <select id="work_type" name="work_type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                                     @foreach(['remote', 'on-site', 'hybrid'] as $type)
-                                        <option value="{{ $type }}" {{ old('work_type', $jobPost->work_type) === $type ? 'selected' : '' }}>
+                                        <option value="{{ $type }}" {{ old('work_type', $job->work_type) === $type ? 'selected' : '' }}>
                                             {{ ucfirst($type) }}
                                         </option>
                                     @endforeach
@@ -75,18 +76,18 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <x-input-label for="salary_range" :value="__('Salary Range')" />
-                                <x-text-input id="salary_range" name="salary_range" type="text" class="mt-1 block w-full" :value="old('salary_range', $jobPost->salary_range)" placeholder="e.g. $50,000 - $70,000" />
+                                <x-text-input id="salary_range" name="salary_range" type="text" class="mt-1 block w-full" :value="old('salary_range', $job->salary_range)" placeholder="e.g. $50,000 - $70,000" />
                                 <x-input-error class="mt-2" :messages="$errors->get('salary_range')" />
                             </div>
 
                             <x-text-input id="application_deadline" name="application_deadline" type="date"
                             class="mt-1 block w-full"
-                            :value="old('application_deadline', \Carbon\Carbon::parse($jobPost->application_deadline)->format('Y-m-d'))"
+                            :value="old('application_deadline', \Carbon\Carbon::parse($job->application_deadline)->format('Y-m-d'))"
                             :min="date('Y-m-d')" />
 
                         </div>
 
-                        <div x-data="{ skills: {{ json_encode(old('skills', $jobPost->skills ?? [])) }} }">
+                        <div x-data="{ skills: {{ json_encode(old('skills', $job->skills ?? [])) }} }">
                             <x-input-label :value="__('Required Skills')" />
                             <div class="mt-2 space-y-2">
                                 <template x-for="(skill, index) in skills" :key="index">
@@ -107,7 +108,7 @@
                         </div>
 
 
-                        <div x-data="{ qualifications: {{ json_encode(old('qualifications', $jobPost->qualifications ?? [])) }} }">
+                        <div x-data="{ qualifications: {{ json_encode(old('qualifications', $job->qualifications ?? [])) }} }">
                             <x-input-label :value="__('Required qualifications')" />
                             <div class="mt-2 space-y-2">
                                 <template x-for="(qualification, index) in qualifications" :key="index">
@@ -130,7 +131,7 @@
                         <div>
                             <x-input-label for="branding_image" :value="__('Company Logo/Branding')" />
                             <div class="mt-2 flex items-center gap-4">
-                                <div x-data="{ imageUrl: '{{ $jobPost->branding_image ? asset('storage/' . $jobPost->branding_image) : '' }}' }" class="relative">
+                                <div x-data="{ imageUrl: '{{ $job->branding_image ? asset('storage/' . $job->branding_image) : '' }}' }" class="relative">
                                     <label class="block">
                                         <span class="sr-only">Choose company logo</span>
                                         <input type="file" name="branding_image" id="branding_image" accept="image/*"
@@ -141,7 +142,7 @@
                                         <img :src="imageUrl" class="h-24 w-24 object-cover rounded border" />
                                     </div>
                                 </div>
-                                @if($jobPost->branding_image)
+                                @if($job->branding_image)
                                     <div class="flex items-center">
                                         <label class="flex items-center">
                                             <input type="checkbox" name="remove_image" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">

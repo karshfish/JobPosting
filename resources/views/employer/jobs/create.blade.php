@@ -1,21 +1,21 @@
-<x-app-layout>
+<x-employer-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between w-full">
             <div>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Create Job Post') }}</h2>
                 <p class="mt-1 text-sm text-gray-600">{{ __('Create a new job listing') }}</p>
             </div>
             <div class="flex items-center space-x-3">
-                <a href="{{ route('jobPosts.index') }}" class="inline-flex items-center px-3 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ __('Cancel') }}</a>
+                <a href="{{ route('jobs.index') }}" class="inline-flex items-center px-3 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ __('Cancel') }}</a>
             </div>
         </div>
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form action="{{ route('jobPosts.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <form action="{{ route('jobs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                         @csrf
 
                         <div>
@@ -193,7 +193,7 @@
                         </div>
 
                         <div class="flex items-center justify-end">
-                            <a href="{{ route('jobPosts.index') }}" class="mr-3 inline-flex items-center px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">{{ __('Cancel') }}</a>
+                            <a href="{{ route('jobs.index') }}" class="mr-3 inline-flex items-center px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">{{ __('Cancel') }}</a>
                             <x-primary-button>{{ __('Create') }}</x-primary-button>
                         </div>
                     </form>

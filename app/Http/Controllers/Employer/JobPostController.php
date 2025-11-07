@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Employer;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreJobPostRequest;
 use App\Http\Requests\UpdateJobPostRequest;
 use App\Models\JobPost;
@@ -15,7 +15,7 @@ class JobPostController extends Controller
      */
     public function index()
     {
-        $jobPosts = JobPost::all();
+        $jobPosts = JobPost::with('user')->latest()->get();
         return view('employer.jobs.index', compact('jobPosts'));
     }
 
@@ -64,24 +64,24 @@ class JobPostController extends Controller
 
     JobPost::create($data);
 
-    return redirect()->route('jobPosts.index')
+    return redirect()->route('jobs.index')
         ->with('success', 'Job created successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(JobPost $jobPost)
+    public function show(JobPost $job)
 {
-    return view('employer.jobs.show', compact('jobPost'));
+    return view('employer.jobs.show', compact('job'));
 }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(JobPost $jobPost)
+    public function edit(JobPost $job)
 {
-    return view('employer.jobs.edit', compact('jobPost'));
+    return view('employer.jobs.edit', compact('job'));
 }
 
 public function update(UpdateJobPostRequest $request, JobPost $jobPost)
@@ -95,7 +95,7 @@ public function update(UpdateJobPostRequest $request, JobPost $jobPost)
     $jobPost->update($data);
 
     return redirect()
-        ->route('jobPosts.index')
+        ->route('jobs.index')
         ->with('success', 'Job post updated successfully.');
 }
 
@@ -103,11 +103,11 @@ public function update(UpdateJobPostRequest $request, JobPost $jobPost)
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(JobPost $jobPost)
+    public function destroy(JobPost $job)
     {
-        $jobPost->delete();
+        $job->delete();
 
-        return redirect()->route('jobPosts.index')
+        return redirect()->route('jobs.index')
             ->with('success', 'Job deleted successfully!');
     }
 }
