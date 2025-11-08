@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\JobModerationController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\UserManagementController;
 
 Route::middleware(['auth','role:admin'])
     ->prefix('admin')->name('admin.')
@@ -17,4 +19,6 @@ Route::middleware(['auth','role:admin'])
         Route::post('/jobs/{job}/reject', [JobModerationController::class,'reject'])->name('jobs.reject');
 
         Route::resource('categories', CategoryController::class);
+        Route::resource('companies', CompanyController::class)->except(['show']);
+        Route::resource('users', UserManagementController::class)->only(['index','edit','update']);
     });

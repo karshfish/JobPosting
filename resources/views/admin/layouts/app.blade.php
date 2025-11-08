@@ -65,6 +65,16 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path d="M3.75 5.25A2.25 2.25 0 0 1 6 3h12a2.25 2.25 0 0 1 2.25 2.25V9A2.25 2.25 0 0 1 18 11.25H6A2.25 2.25 0 0 1 3.75 9V5.25ZM3.75 15A2.25 2.25 0 0 1 6 12.75h12A2.25 2.25 0 0 1 20.25 15v3.75A2.25 2.25 0 0 1 18 21H6a2.25 2.25 0 0 1-2.25-2.25V15Z"/></svg>
           <span class="sidebar-label">Categories</span>
         </a>
+        <a href="{{ route('admin.companies.index') }}"
+           class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md {{ request()->routeIs('admin.companies.*') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50' }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path d="M3.75 4.5A2.25 2.25 0 0 1 6 2.25h12A2.25 2.25 0 0 1 20.25 4.5v15a.75.75 0 0 1-.75.75H4.5a.75.75 0 0 1-.75-.75v-15ZM7.5 6h9v1.5h-9V6Zm0 3h9v1.5h-9V9Zm0 3h6v1.5h-6V12Z"/></svg>
+          <span class="sidebar-label">Companies</span>
+        </a>
+        <a href="{{ route('admin.users.index') }}"
+           class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md {{ request()->routeIs('admin.users.*') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50' }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path d="M15 8.25a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM4.5 18.75a6.75 6.75 0 0 1 13.5 0V20a.75.75 0 0 1-.75.75H5.25A.75.75 0 0 1 4.5 20v-1.25Z"/></svg>
+          <span class="sidebar-label">Users</span>
+        </a>
       </nav>
       <div class="sidebar-footer px-4 py-3 border-t border-slate-200 dark:border-slate-800">
         @if(auth()->check())
