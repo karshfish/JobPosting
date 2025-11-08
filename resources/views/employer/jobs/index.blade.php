@@ -52,26 +52,43 @@
 
                     <!-- Quick Filters -->
                     <div class="bg-white overflow-hidden shadow-sm rounded-lg p-6">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">{{ __('Quick Filters') }}</h3>
-                        <div class="space-y-4">
-                            <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-700">{{ __('All Posts') }}</span>
-                                <span class="text-sm font-semibold text-gray-900">{{ $collection->count() }}</span>
-                            </button>
-                            <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-700">{{ __('Published') }}</span>
-                                <span class="text-sm font-semibold text-green-600">{{ $publishedCount }}</span>
-                            </button>
-                            <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-700">{{ __('draft Review') }}</span>
-                                <span class="text-sm font-semibold text-yellow-600">{{ $draftCount }}</span>
-                            </button>
-                            <button class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-50 flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-700">{{ __('Closed') }}</span>
-                                <span class="text-sm font-semibold text-gray-600">{{ $closedCount }}</span>
-                            </button>
-                        </div>
-                    </div>
+    <h3 class="text-lg font-medium text-gray-900 mb-4">{{ __('Quick Filters') }}</h3>
+
+    <div class="space-y-3">
+        {{-- All --}}
+        <a href="{{ route('jobs.index') }}"
+           class="w-full block px-4 py-2 rounded-lg flex items-center justify-between
+                  text-left hover:bg-gray-50 transition {{ request('status') == '' ? 'bg-indigo-50 border border-indigo-100' : '' }}">
+            <span class="text-sm font-medium text-gray-700">All Posts</span>
+            <span class="text-sm font-semibold text-gray-900">{{ $collection->count() }}</span>
+        </a>
+
+        {{-- Published --}}
+        <a href="{{ route('jobs.index', ['status' => 'published']) }}"
+           class="w-full block px-4 py-2 rounded-lg flex items-center justify-between
+                  text-left hover:bg-gray-50 transition {{ request('status') == 'published' ? 'bg-green-50 border border-green-100' : '' }}">
+            <span class="text-sm font-medium text-gray-700">Published</span>
+            <span class="text-sm font-semibold text-green-600">{{ $publishedCount }}</span>
+        </a>
+
+        {{-- Draft --}}
+        <a href="{{ route('jobs.index', ['status' => 'draft']) }}"
+           class="w-full block px-4 py-2 rounded-lg flex items-center justify-between
+                  text-left hover:bg-gray-50 transition {{ request('status') == 'draft' ? 'bg-yellow-50 border border-yellow-100' : '' }}">
+            <span class="text-sm font-medium text-gray-700">Draft</span>
+            <span class="text-sm font-semibold text-yellow-600">{{ $draftCount }}</span>
+        </a>
+
+        {{-- Closed --}}
+        <a href="{{ route('jobs.index', ['status' => 'closed']) }}"
+           class="w-full block px-4 py-2 rounded-lg flex items-center justify-between
+                  text-left hover:bg-gray-50 transition {{ request('status') == 'closed' ? 'bg-gray-50 border border-gray-200' : '' }}">
+            <span class="text-sm font-medium text-gray-700">Closed</span>
+            <span class="text-sm font-semibold text-gray-600">{{ $closedCount }}</span>
+        </a>
+    </div>
+</div>
+
                 </aside>
 
                 <!-- Right: Job Posts List -->
@@ -249,7 +266,7 @@
                                             </svg>
                                             {{ __('View') }}
                                         </a>
-                                        
+
 
 
                                     </div>

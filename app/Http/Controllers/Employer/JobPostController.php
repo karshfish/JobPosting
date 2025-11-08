@@ -13,11 +13,29 @@ class JobPostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $jobPosts = JobPost::with('user')->latest()->get();
-        return view('employer.jobs.index', compact('jobPosts'));
+     public function index(Request $request)
+{
+    // Start base query
+    $query = JobPost::with('user')->latest();
+
+    // Filter by status if provided
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
     }
+
+    // Get filtered results
+    $jobPosts = $query->paginate(10);
+
+    // Counts for Quick Filters
+    $allCount = JobPost::count();
+    $publishedCount = JobPost::where('status', 'published')->count();
+    $draftCount = JobPost::where('status', 'draft')->count();
+    $closedCount = JobPost::where('status', 'closed')->count();
+
+    return view('employer.jobs.index', compact(
+        'jobPosts', 'allCount', 'publishedCount', 'draftCount', 'closedCount'
+    ));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -84,16 +102,15 @@ class JobPostController extends Controller
     return view('employer.jobs.edit', compact('job'));
 }
 
-public function update(UpdateJobPostRequest $request, JobPost $jobPost)
+public function update(UpdateJobPostRequest $request, JobPost $job)
 {
+    // dd($job);
     $data = $request->validated();
     $data['user_id'] = Auth::id();
 
-    // ✅ حفظ الصورة (مع الاحتفاظ القديمة إن لم تُرفع جديدة)
-    $data['branding_image'] = $this->handleBrandingImage($request, $jobPost->branding_image);
 
-    $jobPost->update($data);
-
+    $data['branding_image'] = $this->handleBrandingImage($request, $job->branding_image);
+    $job->update($data);
     return redirect()
         ->route('jobs.index')
         ->with('success', 'Job post updated successfully.');

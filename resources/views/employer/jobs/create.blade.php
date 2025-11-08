@@ -48,14 +48,25 @@
                                 <textarea id="benefits" name="benefits" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm px-4 py-2" placeholder="e.g. Health insurance, Remote allowance">{{ old('benefits') }}</textarea>
                                 <x-input-error class="mt-2" :messages="$errors->get('benefits')" />
                             </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <x-input-label for="location" :value="__('location')" />
                                 <x-text-input id="location" name="location" type="text" class="mt-1 block w-full" :value="old('location')" placeholder="City, Country or 'Remote'" />
                                 <x-input-error class="mt-2" :messages="$errors->get('location')" />
                             </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                             <div>
+                            <x-input-label for="status" :value="__('Status')" />
+                            <select id="status" name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                <option value="" disabled {{ is_null(old('status')) || old('status') == '' ? 'selected' : '' }}>Select status</option>
+                                <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
+                                <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
+                                <option value="closed" {{ old('status') == 'closed' ? 'selected' : '' }}>Closed</option>
+                            </select>
+                            <x-input-error class="mt-2" :messages="$errors->get('status')" />
+                        </div>
 
                             <div>
                                 <x-input-label for="work_type" :value="__('Work Type')" />
@@ -181,16 +192,7 @@
                             <x-input-error class="mt-2" :messages="$errors->get('branding_image')" />
                         </div>
 
-                        <div>
-                            <x-input-label for="status" :value="__('Status')" />
-                            <select id="status" name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                                <option value="" disabled {{ is_null(old('status')) || old('status') == '' ? 'selected' : '' }}>Select status</option>
-                                <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
-                                <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
-                                <option value="closed" {{ old('status') == 'closed' ? 'selected' : '' }}>Closed</option>
-                            </select>
-                            <x-input-error class="mt-2" :messages="$errors->get('status')" />
-                        </div>
+
 
                         <div class="flex items-center justify-end">
                             <a href="{{ route('jobs.index') }}" class="mr-3 inline-flex items-center px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">{{ __('Cancel') }}</a>
