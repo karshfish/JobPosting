@@ -24,3 +24,13 @@ if ($test) {
     echo "Test user exists: {$test->email}, role={$test->role}\n";
 }
 
+// List all admin users
+$admins = User::where('role', 'admin')->get(['id','name','email']);
+if ($admins->count()) {
+    echo "Admins (role=admin):\n";
+    foreach ($admins as $u) {
+        echo " - {$u->id}: {$u->email} ({$u->name})\n";
+    }
+} else {
+    echo "No users with role=admin found.\n";
+}

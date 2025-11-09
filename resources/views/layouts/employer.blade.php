@@ -40,9 +40,9 @@
                 <button @click="profileOpen = !profileOpen"
                         class="flex items-center text-sm focus:outline-none rounded-full hover:bg-gray-100 px-3 py-1">
                     <img class="h-8 w-8 rounded-full mr-2"
-                         src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=4f46e5&color=fff"
+                         src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()?->name ?? 'Guest') }}&background=4f46e5&color=fff"
                          alt="Profile">
-                    <span class="text-gray-700 font-medium hidden sm:block">{{ Auth::user()->name }}</span>
+                    <span class="text-gray-700 font-medium hidden sm:block">{{ auth()->user()?->name ?? 'Guest' }}</span>
                     <svg class="w-4 h-4 ml-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M19 9l-7 7-7-7" />

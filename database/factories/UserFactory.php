@@ -41,4 +41,27 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Admin state: ensure role column is 'admin' and assign Spatie role if available.
+     */
+    public function admin(): static
+    {
+        return $this
+            ->afterMaking(function ($user) {
+                // Set role before save (works with make())
+                $user->setAttribute('role', 'admin');
+            })
+            ->afterCreating(function ($user) {
+                // Persist role even if it's not mass assignable
+                if ($user->getAttribute('role') !== 'admin') {
+                    $user->setAttribute('role', 'admin');
+                    $user->save();
+                }
+                // Assign Spatie role if trait is present
+                if (method_exists($user, 'assignRole')) {
+                    try { $user->assignRole('admin'); } catch (\Throwable $e) { /* ignore */ }
+                }
+            });
+    }
 }

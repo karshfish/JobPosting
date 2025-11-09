@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Employer\EmployerDashboardController;
 use App\Http\Controllers\Employer\JobPostController;
-use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\JobListingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
