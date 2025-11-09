@@ -3,6 +3,7 @@
 use App\Http\Controllers\Employer\EmployerDashboardController;
 use App\Http\Controllers\Employer\JobPostController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\JobListingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('jobs', JobPostController::class);
     Route::get('/applications', [ApplicationController::class, 'index']);
     Route::get('/job-listings', [JobListingController::class, 'index'])->name('employer.jobListings');
+    Route::post('/jobs/{job}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 Route::get('/employer/analysis', [App\Http\Controllers\Employer\AnalysisController::class, 'index'])
