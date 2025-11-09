@@ -12,12 +12,10 @@
         <div>
           <div class="font-medium text-slate-800 dark:text-slate-100">{{ $user->name }}</div>
           <div class="text-sm text-slate-500">{{ $user->email }}</div>
-          <div class="mt-2 flex flex-wrap gap-1">
-            @forelse($user->getRoleNames() as $role)
-              <span class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ $role }}</span>
-            @empty
-              <span class="text-xs text-slate-500">No roles</span>
-            @endforelse
+          <div class="mt-2">
+            <span class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+              {{ $user->role ?: 'none' }}
+            </span>
           </div>
         </div>
         <div>
@@ -29,4 +27,3 @@
 
   <div class="mt-4">{{ $users->links() }}</div>
 @endsection
-

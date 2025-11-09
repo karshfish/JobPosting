@@ -79,15 +79,10 @@
       <div class="sidebar-footer px-4 py-3 border-t border-slate-200 dark:border-slate-800">
         @if(auth()->check())
           <div class="mb-2 text-sm font-medium text-slate-800 dark:text-slate-100">{{ auth()->user()->name }}</div>
-          @php($roles = auth()->user()->getRoleNames())
-          @if($roles->isNotEmpty())
-            <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Your roles</div>
-            <div class="flex flex-wrap gap-1">
-              @foreach($roles as $role)
-                <span class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ $role }}</span>
-              @endforeach
-            </div>
-          @endif
+          <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Your role</div>
+          <div class="flex flex-wrap gap-1">
+            <span class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->role ?: 'none' }}</span>
+          </div>
         @endif
         <div class="mt-3 text-[11px] text-slate-500 dark:text-slate-400">&copy; {{ date('Y') }} JobPosting</div>
       </div>
