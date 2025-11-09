@@ -34,5 +34,6 @@ class ApplicationController extends Controller
         ]);
 
         return redirect()->route('candidate.dashboard')->with('success', 'Application submitted successfully.');
+
     }
 }

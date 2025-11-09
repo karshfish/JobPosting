@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+
 use App\Models\Candidate;
 use App\Models\Job;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -15,6 +16,7 @@ class ApplicationFactory extends Factory
             'job_id' => Job::factory(),
             'resume' => null,
             'status' => 'pending',
+
         ];
     }
 }

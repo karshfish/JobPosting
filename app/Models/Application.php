@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Application extends Model
 {
+
     use HasFactory;
 
     protected $fillable = [
@@ -25,4 +26,5 @@ class Application extends Model
     {
         return $this->belongsTo(Job::class);
     }
+
 }
