@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 
 class UserManagementController extends Controller
 {
@@ -17,16 +16,20 @@ class UserManagementController extends Controller
 
     public function edit(User $user)
     {
-        $roles = Role::orderBy('name')->pluck('name');
-        $userRoles = $user->getRoleNames();
-        return view('admin.users.edit', compact('user','roles','userRoles'));
+        $roles = collect(['admin', 'employer', 'candidate']);
+        $userRole = $user->role;
+        return view('admin.users.edit', compact('user','roles','userRole'));
     }
 
     public function update(Request $request, User $user)
     {
-        $roles = $request->input('roles', []);
-        $user->syncRoles($roles);
-        return redirect()->route('admin.users.index')->with('status', 'User roles updated.');
+        $validated = $request->validate([
+            'role' => ['required', 'in:admin,employer,candidate'],
+        ]);
+
+        $user->role = $validated['role'];
+        $user->save();
+
+        return redirect()->route('admin.users.index')->with('status', 'User role updated.');
     }
 }
-
