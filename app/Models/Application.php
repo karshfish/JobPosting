@@ -7,6 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class Application extends Model
 {
-    /** @use HasFactory<\Database\Factories\ApplicationFactory> */
+
     use HasFactory;
+
+    protected $fillable = [
+        'candidate_id',
+        'job_id',
+        'resume',
+        'status',
+    ];
+
+    public function candidate()
+    {
+        return $this->belongsTo(Candidate::class);
+    }
+
+    public function job()
+    {
+        return $this->belongsTo(Job::class);
+    }
+
 }
