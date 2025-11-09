@@ -2,64 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Job;
 use App\Models\Application;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class ApplicationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function store(Request $request, Job $job)
     {
-        //
-    }
+        $candidate = auth::user()->candidate;
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        // منع التكرار
+        if ($job->applications()->where('candidate_id', $candidate->id)->exists()) {
+            return back()->with('error', 'You have already applied to this job.');
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $path = $candidate->resume; // الافتراضي السيرة الموجودة
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Application $application)
-    {
-        //
-    }
+        // لو المرشح حب يرفع CV جديد أثناء التقديم
+        if ($request->hasFile('resume')) {
+            $request->validate([
+                'resume' => 'mimes:pdf|max:2048',
+            ]);
+            $path = $request->file('resume')->store('resumes', 'public');
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Application $application)
-    {
-        //
-    }
+        Application::create([
+            'candidate_id' => $candidate->id,
+            'job_id' => $job->id,
+            'resume' => $path,
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Application $application)
-    {
-        //
-    }
+        return redirect()->route('candidate.dashboard')->with('success', 'Application submitted successfully.');
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Application $application)
-    {
-        //
     }
 }
