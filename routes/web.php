@@ -7,7 +7,6 @@ use App\Http\Controllers\JobListingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CandidateController;
-use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\JobController;
 
 
@@ -42,13 +41,12 @@ Route::middleware(['auth'])->group(function () {
 
     // تقديم على وظيفة
     Route::post('/jobs/{job}/apply', [ApplicationController::class, 'store'])->name('jobs.apply');
-
 });
 
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 require __DIR__ . '/candidate.php';
 
 Route::get('/employer', function () {
@@ -67,7 +65,5 @@ Route::get('/employer/analysis', [App\Http\Controllers\Employer\AnalysisControll
     ->middleware('auth');
 
 
-require __DIR__.'/auth.php';
-require __DIR__.'/admin.php';
-
-
+require __DIR__ . '/auth.php';
+require __DIR__ . '/admin.php';
