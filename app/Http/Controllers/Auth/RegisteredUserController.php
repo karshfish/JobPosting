@@ -50,6 +50,7 @@ class RegisteredUserController extends Controller
             'profile_image' => $path,
             'role' => 'candidate'
         ]);
+        
 
         event(new Registered($user));
 

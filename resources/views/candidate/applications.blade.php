@@ -1,14 +1,21 @@
-<h1>Your Applications</h1>
+<x-app-layout>
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">Your Job Applications</h1>
 
-<table>
-    <tr>
-        <th>Job</th>
-        <th>Status</th>
-    </tr>
-    @foreach($applications as $application)
-    <tr>
-        <td>{{ $application->job->title }}</td>
-        <td>{{ $application->status }}</td>
-    </tr>
-    @endforeach
-</table>
+        @if($applications->count() > 0)
+        <ul class="space-y-2">
+            @foreach($applications as $application)
+            <li class="border p-3 rounded flex justify-between items-center">
+                <div>
+                    <strong>{{ $application->job->title }}</strong>
+                    <p class="text-gray-500 text-sm">{{ $application->job->location ?? '' }}</p>
+                </div>
+                <span class="text-sm text-gray-500">Status: {{ $application->status }}</span>
+            </li>
+            @endforeach
+        </ul>
+        @else
+        <p class="text-gray-500">You have not applied to any jobs yet.</p>
+        @endif
+    </div>
+</x-app-layout>

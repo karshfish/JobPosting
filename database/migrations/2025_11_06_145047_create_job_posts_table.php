@@ -26,8 +26,7 @@ return new class extends Migration
             $table->enum('work_type', ['remote', 'on-site', 'hybrid'])->default('on-site');
             $table->string('branding_image')->nullable();
             $table->date('application_deadline')->nullable();
-            $table->enum('status', ['draft', 'published', 'closed'])->default('draft');
-            $table->timestamps();
+            $table->enum('status', ['draft', 'published', 'closed'])->default('draft');            $table->timestamps();
         });
     }
 

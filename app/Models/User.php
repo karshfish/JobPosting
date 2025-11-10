@@ -29,13 +29,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function candidate(): HasOne
-    {
-        return $this->hasOne(Candidate::class);
-    }
 
-    public function jobs(): HasMany
-    {
-        return $this->hasMany(Job::class, 'employer_id');
-    }
+
+
 }

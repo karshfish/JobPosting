@@ -1,30 +1,25 @@
 <x-app-layout>
-    <div class="max-w-5xl mx-auto py-8">
-        <h1 class="text-2xl font-semibold mb-6">My Applications</h1>
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">Welcome, {{ $candidate->user->name }}</h1>
 
-        <table class="w-full border-collapse text-left">
-            <thead>
-                <tr class="border-b">
-                    <th class="py-2">Job</th>
-                    <th class="py-2">Status</th>
-                    <th class="py-2">Applied</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($applications as $app)
-                <tr class="border-b">
-                    <td class="py-2">{{ $app->job->title }}</td>
-                    <td class="py-2">{{ ucfirst($app->status) }}</td>
-                    <td class="py-2">{{ $app->created_at->diffForHumans() }}</td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="3" class="py-4 text-center">No applications yet.</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
+        <div class="bg-white shadow rounded p-4">
+            <h2 class="text-xl font-semibold mb-3">Your Applications</h2>
 
-        <a href="/jobs" class="inline-block mt-6 text-blue-600 underline">Browse Jobs</a>
+            @if($applications->count() > 0)
+            <ul class="space-y-2">
+                @foreach($applications as $application)
+                <li class="border p-3 rounded flex justify-between items-center">
+                    <div>
+                        <strong>{{ $application->job->title }}</strong>
+                        <p class="text-gray-500 text-sm">{{ $application->job->location ?? '' }}</p>
+                    </div>
+                    <span class="text-sm text-gray-500">Status: {{ $application->status }}</span>
+                </li>
+                @endforeach
+            </ul>
+            @else
+            <p class="text-gray-500">You have not applied to any jobs yet.</p>
+            @endif
+        </div>
     </div>
 </x-app-layout>

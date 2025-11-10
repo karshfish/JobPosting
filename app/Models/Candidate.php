@@ -13,8 +13,10 @@ class Candidate extends Model
     protected $fillable = [
         'user_id',
         'phone',
-        'cv_path'
+        'address',
+        'resume'
     ];
+
 
     public function user()
     {

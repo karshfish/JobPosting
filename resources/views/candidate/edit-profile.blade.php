@@ -1,20 +1,34 @@
 <x-app-layout>
-    <div class="max-w-lg mx-auto py-8">
-        <h1 class="text-xl font-semibold mb-4">Edit Profile</h1>
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">Edit Profile</h1>
 
-        <form method="POST" action="{{ route('candidate.profile.update') }}" enctype="multipart/form-data">
+        @if(session('success'))
+        <div class="bg-green-200 p-3 rounded mb-4">{{ session('success') }}</div>
+        @endif
+
+        <form action="{{ route('candidate.updateProfile') }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
 
-            <label class="block mb-2">Phone</label>
-            <input type="text" name="phone" value="{{ $candidate->phone }}" class="border rounded w-full p-2 mb-4" />
+            <div class="mb-4">
+                <label class="block mb-1 font-semibold">Phone</label>
+                <input type="text" name="phone" value="{{ old('phone', $candidate->phone) }}" class="border p-2 w-full rounded">
+            </div>
 
-            <label class="block mb-2">Address</label>
-            <input type="text" name="address" value="{{ $candidate->address }}" class="border rounded w-full p-2 mb-4" />
+            <div class="mb-4">
+                <label class="block mb-1 font-semibold">Address</label>
+                <input type="text" name="address" value="{{ old('address', $candidate->address) }}" class="border p-2 w-full rounded">
+            </div>
 
-            <label class="block mb-2">Resume (PDF)</label>
-            <input type="file" name="resume" class="block mb-4" />
+            <div class="mb-4">
+                <label class="block mb-1 font-semibold">Resume (PDF)</label>
+                <input type="file" name="resume" class="border p-2 w-full rounded">
+                @if($candidate->resume)
+                <p class="text-sm text-gray-500 mt-1">Current: <a href="{{ asset('storage/' . $candidate->resume) }}" target="_blank">Download</a></p>
+                @endif
+            </div>
 
-            <button class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Update Profile</button>
         </form>
     </div>
 </x-app-layout>

@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Application;
 use App\Models\Candidate;
-use App\Models\Job;
+use App\Models\JobPost;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         Candidate::factory(10)->create();
 
         // Create jobs for testing (assuming Job model ready)
-        Job::factory(10)->create();
+        JobPost::factory(10)->create();
 
         // Create sample applications
         Application::factory(20)->create();

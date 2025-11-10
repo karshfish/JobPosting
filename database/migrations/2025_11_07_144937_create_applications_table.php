@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('candidate_id')->constrained()->onDelete('cascade');
-            $table->foreignId('job_id')->constrained()->onDelete('cascade');
+            $table->foreignId('job_id')->constrained('job_posts')->onDelete('cascade');
             $table->string('resume')->nullable(); // لو رفع CV خاص للوظيفة
-            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('accepted');
             $table->timestamps();
         });
     }
