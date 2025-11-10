@@ -91,6 +91,11 @@ class JobPostController extends Controller
      */
     public function show(JobPost $job)
 {
+    $job->load([
+        'comments' => fn($q) => $q->whereNull('parent_id')->latest(),
+        'comments.user',
+        'comments.replies.user',
+    ]);
     return view('employer.jobs.show', compact('job'));
 }
 

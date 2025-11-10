@@ -292,6 +292,213 @@
         @endif
     </div>
 </div>
+<!-- Comments Section -->
+<div class="mt-10">
+    <h3 class="text-2xl font-semibold mb-6 text-gray-900 flex items-center">
+        <svg class="h-6 w-6 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M7 8h10M7 12h6m-6 4h10M21 12c0 4.418-4.477 8-10 8a10.37 10.37 0 01-4.472-.987L3 20l1.658-3.316A7.972 7.972 0 012 12C2 7.582 6.477 4 12 4s10 3.582 10 8z" />
+        </svg>
+        Comments
+    </h3>
+
+    <!-- Add Comment Form -->
+    @auth
+        <form action="{{ route('comments.store', $job) }}" method="POST" class="mb-6 bg-gray-50 p-4 rounded-lg shadow-sm">
+            @csrf
+            <textarea name="content" rows="3" class="w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm resize-none"
+                placeholder="Write a comment..."></textarea>
+            <div class="flex justify-end mt-3">
+                <x-primary-button class="px-5 py-2">Add Comment</x-primary-button>
+            </div>
+        </form>
+    @else
+        <p class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+            You must <a href="{{ route('login') }}" class="text-indigo-600 hover:underline">log in</a> to comment.
+        </p>
+    @endauth
+
+    <!-- Comments List -->
+  <!-- Comments List -->
+{{-- <div class="space-y-6 max-h-80 overflow-auto">
+    @foreach ($job->comments()->whereNull('parent_id')->latest()->get() as $comment)
+        <div x-data="{ openReply: false }" class="border p-3 rounded-md">
+            <div class="flex items-start space-x-3">
+                <!-- User Avatar / Initials -->
+                <div class="flex-shrink-0">
+                    @if($comment->user->profile_photo_url)
+                        <img class="h-10 w-10 rounded-full object-cover"
+                             src="{{ $comment->user->profile_photo_url }}"
+                             alt="{{ $comment->user->name }}">
+                    @else
+                        <div class="h-10 w-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-medium">
+                            {{ strtoupper(substr($comment->user->name, 0, 2)) }}
+                        </div>
+                    @endif
+                </div>
+
+                <div class="flex-1">
+                    <!-- Name & Time -->
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-gray-700">{{ $comment->user->name }}</span>
+                        <span class="text-xs text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
+                    </div>
+
+                    <!-- Comment Content -->
+                    <div class="text-gray-900 mt-1">{{ $comment->content }}</div>
+
+                    <!-- Reply Button -->
+                    @auth
+                        <button type="button"
+                            @click="openReply = !openReply"
+                            class="text-blue-600 text-sm mt-2">Reply</button>
+
+                        <form
+                            x-show="openReply"
+                            action="{{ route('comments.store', $job) }}"
+                            method="POST"
+                            class="mt-2"
+                        >
+                            @csrf
+                            <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                            <textarea name="content" rows="2" class="w-full rounded-md border-gray-300 shadow-sm" placeholder="Write your reply..."></textarea>
+                            <x-primary-button class="mt-2">Reply</x-primary-button>
+                        </form>
+                    @endauth
+
+                   <!-- Replies -->
+@if ($comment->replies->count())
+    <div class="mt-3 ml-6 space-y-3 border-l pl-4">
+        @foreach ($comment->replies as $reply)
+            <div class="flex items-start space-x-3 text-sm">
+                <!-- Reply User Avatar / Initials -->
+                <div class="flex-shrink-0">
+                    @if($reply->user->profile_photo_url)
+                        <img class="h-8 w-8 rounded-full object-cover"
+                             src="{{ $reply->user->profile_photo_url }}"
+                             alt="{{ $reply->user->name }}">
+                    @else
+                        <div class="h-8 w-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-medium text-xs">
+                            {{ strtoupper(substr($reply->user->name, 0, 2)) }}
+                        </div>
+                    @endif
+                </div>
+
+                <div class="flex-1">
+                    <span class="font-medium text-gray-700">{{ $reply->user->name }}</span>:<br/>
+                    <span class="text-gray-900">{{ $reply->content }}</span>
+                    <div class="text-xs text-gray-500">{{ $reply->created_at->diffForHumans() }}</div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+@endif
+
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+
+</div> --}}
+
+<!-- Comments List -->
+<div class="space-y-6 max-h-80 overflow-auto">
+    @foreach ($job->comments()->whereNull('parent_id')->latest()->get() as $comment)
+        <div x-data="{ openReply: false }" class="border p-3 rounded-md">
+            <div class="flex items-start space-x-3">
+                <!-- User Avatar -->
+                <div class="flex-shrink-0">
+                    @if($comment->user->profile_photo_url)
+                        <img class="h-10 w-10 rounded-full object-cover"
+                             src="{{ $comment->user->profile_photo_url }}"
+                             alt="{{ $comment->user->name }}">
+                    @else
+                        <div class="h-10 w-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-medium">
+                            {{ strtoupper(substr($comment->user->name, 0, 2)) }}
+                        </div>
+                    @endif
+                </div>
+
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-sm font-medium text-gray-700">{{ $comment->user->name }}</span>
+                            <div class="text-xs text-gray-500">{{ $comment->created_at->diffForHumans() }}</div>
+                        </div>
+
+                        <!-- Delete button only for comment author or job owner -->
+                        @auth
+                            @if(Auth::id() === $comment->user_id || Auth::id() === $job->user_id)
+                                <form action="{{ route('comments.destroy', $comment) }}" method="POST" class="ml-3"
+                                      onsubmit="return confirm('Are you sure you want to delete this comment?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 text-xs hover:underline">Delete</button>
+                                </form>
+                            @endif
+                        @endauth
+                    </div>
+
+                    <div class="mt-1 text-gray-900">{{ $comment->content }}</div>
+
+                    {{-- Reply button --}}
+                    @auth
+                        <button type="button"
+                                @click="openReply = !openReply"
+                                class="text-blue-600 text-sm mt-2">Reply</button>
+
+                        <form x-show="openReply" action="{{ route('comments.store', $job) }}" method="POST" class="mt-2">
+                            @csrf
+                            <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                            <textarea name="content" rows="2" class="w-full rounded-md border-gray-300 shadow-sm" placeholder="Write your reply..."></textarea>
+                            <x-primary-button class="mt-2">Reply</x-primary-button>
+                        </form>
+                    @endauth
+
+                    {{-- Replies --}}
+                    @if ($comment->replies->count())
+                        <div class="mt-3 ml-6 space-y-3 border-l pl-4">
+                            @foreach ($comment->replies as $reply)
+                                <div class="flex items-start space-x-3 text-sm">
+                                    <div class="flex-shrink-0">
+                                        @if($reply->user->profile_photo_url)
+                                            <img class="h-8 w-8 rounded-full object-cover" src="{{ $reply->user->profile_photo_url }}" alt="{{ $reply->user->name }}">
+                                        @else
+                                            <div class="h-8 w-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-medium text-xs">
+                                                {{ strtoupper(substr($reply->user->name, 0, 2)) }}
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-start">
+                                            <span class="font-medium text-gray-700">{{ $reply->user->name }}</span>
+                                            @auth
+                                                @if(Auth::id() === $reply->user_id || Auth::id() === $job->user_id)
+                                                    <form action="{{ route('comments.destroy', $reply) }}" method="POST" class="ml-3"
+                                                          onsubmit="return confirm('Are you sure you want to delete this reply?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="text-red-600 text-xs hover:underline">Delete</button>
+                                                    </form>
+                                                @endif
+                                            @endauth
+                                        </div>
+                                        <div class="text-gray-900">{{ $reply->content }}</div>
+                                        <div class="text-xs text-gray-500">{{ $reply->created_at->diffForHumans() }}</div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+
 
                     </div>
                 </div>
