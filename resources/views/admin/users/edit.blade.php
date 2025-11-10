@@ -1,7 +1,15 @@
 @extends('admin.layouts.app')
 
 @section('page-actions')
-  <a href="{{ route('admin.users.index') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-base text-sm">Back</a>
+  <div class="flex items-center gap-2">
+    <a href="{{ route('admin.users.index') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-base text-sm">Back</a>
+    @if(auth()->id() !== $user->id && ($user->role !== 'admin') && !($user->is_admin ?? false))
+      <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Delete this user? This action cannot be undone.');">
+        @csrf @method('DELETE')
+        <button class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-red-300 text-red-700 hover:bg-red-50 dark:hover:bg-red-900/30 transition-base text-sm">Delete</button>
+      </form>
+    @endif
+  </div>
 @endsection
 
 @section('content')
