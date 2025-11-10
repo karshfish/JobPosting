@@ -61,12 +61,15 @@ class CategoryController extends Controller
                 'required','string','min:2','max:100',
                 Rule::unique('categories', 'name')->ignore($category->id),
             ],
+            'slug' => [
+                'required','string','min:2','max:120',
+                Rule::unique('categories', 'slug')->ignore($category->id),
+                'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+            ],
         ]);
 
         $name = $validated['name'];
-
-        // Only regenerate slug when name changes
-        $slug = $category->name === $name ? $category->slug : $this->uniqueSlug($name, $category->id);
+        $slug = \Illuminate\Support\Str::slug($validated['slug']);
 
         $category->update([
             'name' => $name,

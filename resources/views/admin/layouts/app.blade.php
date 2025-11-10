@@ -25,7 +25,8 @@
     .sidebar.collapsed .sidebar-label { display: none; }
     .sidebar.collapsed .logo-text { display: none; }
     .sidebar .nav-icon { width: 1.5rem; height: 1.5rem; }
-    .sidebar.collapsed .nav-icon { width: 2rem; height: 2rem; }
+    /* Make icons larger when sidebar is collapsed */
+    .sidebar.collapsed .nav-icon { width: 3rem; height: 1rem; }
     .sidebar.collapsed .sidebar-footer { display: none; }
     /* Micro animations */
     @keyframes fade-in { from { opacity:.0; transform: translateY(8px) } to { opacity:1; transform: none } }
@@ -52,29 +53,37 @@
       <nav class="flex-1 p-4 space-y-1">
         <a href="{{ route('admin.dashboard') }}"
            class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md {{ request()->routeIs('admin.dashboard') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50' }}">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path d="M11.47 3.84a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 1-1.06 1.06l-.9-.9V19.5A2.25 2.25 0 0 1 17.25 21h-2.5a.75.75 0 0 1-.75-.75v-3.5a1.25 1.25 0 0 0-1.25-1.25h-1a1.25 1.25 0 0 0-1.25 1.25v3.5a.75.75 0 0 1-.75.75h-2.5A2.25 2.25 0 0 1 3.75 19.5v-6.81l-.9.9a.75.75 0 1 1-1.06-1.06l8.68-8.69Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.47 3.84a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 1-1.06 1.06l-.9-.9V19.5A2.25 2.25 0 0 1 17.25 21h-2.5a.75.75 0 0 1-.75-.75v-3.5a1.25 1.25 0 0 0-1.25-1.25h-1a1.25 1.25 0 0 0-1.25 1.25v3.5a.75.75 0 0 1-.75.75h-2.5A2.25 2.25 0 0 1 3.75 19.5v-6.81l-.9.9a.75.75 0 1 1-1.06-1.06l8.68-8.69Z"/></svg>
           <span class="sidebar-label">Dashboard</span>
         </a>
         <a href="{{ route('admin.jobs.index') }}"
            class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md {{ request()->routeIs('admin.jobs.*') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50' }}">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path d="M9 3.75A2.25 2.25 0 0 1 11.25 1.5h1.5A2.25 2.25 0 0 1 15 3.75V6h3.75A2.25 2.25 0 0 1 21 8.25v9A2.25 2.25 0 0 1 18.75 19.5H5.25A2.25 2.25 0 0 1 3 17.25v-9A2.25 2.25 0 0 1 5.25 6H9V3.75Zm1.5 0V6h3V3.75a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3.75A2.25 2.25 0 0 1 11.25 1.5h1.5A2.25 2.25 0 0 1 15 3.75V6h3.75A2.25 2.25 0 0 1 21 8.25v9A2.25 2.25 0 0 1 18.75 19.5H5.25A2.25 2.25 0 0 1 3 17.25v-9A2.25 2.25 0 0 1 5.25 6H9V3.75Zm1.5 0V6h3V3.75a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75Z"/></svg>
           <span class="sidebar-label">Jobs</span>
         </a>
         <a href="{{ route('admin.categories.index') }}"
            class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md {{ request()->routeIs('admin.categories.*') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50' }}">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path d="M3.75 5.25A2.25 2.25 0 0 1 6 3h12a2.25 2.25 0 0 1 2.25 2.25V9A2.25 2.25 0 0 1 18 11.25H6A2.25 2.25 0 0 1 3.75 9V5.25ZM3.75 15A2.25 2.25 0 0 1 6 12.75h12A2.25 2.25 0 0 1 20.25 15v3.75A2.25 2.25 0 0 1 18 21H6a2.25 2.25 0 0 1-2.25-2.25V15Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25A2.25 2.25 0 0 1 6 3h12a2.25 2.25 0 0 1 2.25 2.25V9A2.25 2.25 0 0 1 18 11.25H6A2.25 2.25 0 0 1 3.75 9V5.25ZM3.75 15A2.25 2.25 0 0 1 6 12.75h12A2.25 2.25 0 0 1 20.25 15v3.75A2.25 2.25 0 0 1 18 21H6a2.25 2.25 0 0 1-2.25-2.25V15Z"/></svg>
           <span class="sidebar-label">Categories</span>
         </a>
-        <a href="{{ route('admin.companies.index') }}"
-           class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md {{ request()->routeIs('admin.companies.*') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50' }}">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path d="M3.75 4.5A2.25 2.25 0 0 1 6 2.25h12A2.25 2.25 0 0 1 20.25 4.5v15a.75.75 0 0 1-.75.75H4.5a.75.75 0 0 1-.75-.75v-15ZM7.5 6h9v1.5h-9V6Zm0 3h9v1.5h-9V9Zm0 3h6v1.5h-6V12Z"/></svg>
-          <span class="sidebar-label">Companies</span>
-        </a>
+        <!-- Companies nav removed from admin -->
         <a href="{{ route('admin.users.index') }}"
            class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md {{ request()->routeIs('admin.users.*') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50' }}">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path d="M15 8.25a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM4.5 18.75a6.75 6.75 0 0 1 13.5 0V20a.75.75 0 0 1-.75.75H5.25A.75.75 0 0 1 4.5 20v-1.25Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 8.25a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM4.5 18.75a6.75 6.75 0 0 1 13.5 0V20a.75.75 0 0 1-.75.75H5.25A.75.75 0 0 1 4.5 20v-1.25Z"/></svg>
           <span class="sidebar-label">Users</span>
         </a>
+
+        <form method="POST" action="{{ route('logout') }}">
+          @csrf
+          <button type="submit"
+                  class="transition-base group flex items-center gap-3 w-full text-left px-3 py-2 rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50">
+            <!-- Changed icon to a power symbol (outline) for clarity -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5v9m6.364-2.136a7.5 7.5 0 1 1-12.728 0" />
+            </svg>
+            <span class="sidebar-label">Logout</span>
+          </button>
+        </form>
       </nav>
       <div class="sidebar-footer px-4 py-3 border-t border-slate-200 dark:border-slate-800">
         @if(auth()->check())
@@ -83,6 +92,13 @@
           <div class="flex flex-wrap gap-1">
             <span class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->role ?: 'none' }}</span>
           </div>
+          <form method="POST" action="{{ route('logout') }}" class="mt-3">
+            @csrf
+            <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-base text-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6A2.25 2.25 0 0 0 5.25 5.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15"/><path d="M12 9l3-3m0 0 3 3m-3-3v12"/></svg>
+              Logout
+            </button>
+          </form>
         @endif
         <div class="mt-3 text-[11px] text-slate-500 dark:text-slate-400">&copy; {{ date('Y') }} JobPosting</div>
       </div>
@@ -108,6 +124,7 @@
             <span class="theme-toggle-light hidden">Light</span>
             <span class="theme-toggle-dark hidden">Dark</span>
           </button>
+          <!-- Header logout removed; using sidebar logout -->
           <div class="text-sm text-slate-500 dark:text-slate-400">@yield('page-actions')</div>
         </div>
       </header>

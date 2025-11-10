@@ -27,6 +27,7 @@
     </div>
   </div>
 
+  
   <div class="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-4">
     <div class="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">Quick Links</div>
     <div class="flex flex-wrap gap-2">

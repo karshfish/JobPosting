@@ -2,11 +2,14 @@
 
 use App\Http\Controllers\Employer\EmployerDashboardController;
 use App\Http\Controllers\Employer\JobPostController;
+
+use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\CommentController;
+
 use App\Http\Controllers\JobListingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CandidateController;
-use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\JobController;
 
 
@@ -30,6 +33,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
 
+
     // Candidate Dashboard
     Route::get('/candidate/dashboard', [CandidateController::class, 'dashboard'])
         ->name('candidate.dashboard');
@@ -50,12 +54,12 @@ Route::middleware(['auth'])->group(function () {
 
     // Submit application
     Route::post('jobs/{job}/apply', [CandidateController::class, 'submitApplication'])->name('candidate.jobs.submit');
+
 });
 
 require __DIR__ . '/candidate.php';
-
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/candidate.php';
 
 
 Route::get('/employer', function () {
@@ -67,6 +71,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('jobs', JobPostController::class);
     Route::get('/applications', [CandidateController::class, 'index']);
     Route::get('/job-listings', [JobListingController::class, 'index'])->name('employer.jobListings');
+    Route::post('/jobs/{job}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 Route::get('/employer/analysis', [App\Http\Controllers\Employer\AnalysisController::class, 'index'])
@@ -74,7 +80,5 @@ Route::get('/employer/analysis', [App\Http\Controllers\Employer\AnalysisControll
     ->middleware('auth');
 
 
-require __DIR__.'/auth.php';
-require __DIR__.'/admin.php';
-
-
+require __DIR__ . '/auth.php';
+require __DIR__ . '/admin.php';

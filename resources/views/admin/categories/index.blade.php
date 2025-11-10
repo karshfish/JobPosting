@@ -10,44 +10,33 @@
 @section('content')
   <div class="mb-4 flex items-center justify-between">
     <div>
-      <h1 class="text-xl font-semibold text-slate-800">Categories</h1>
-      <p class="text-sm text-slate-500">Manage job categories used for classifying posts.</p>
+      <h1 class="text-xl font-semibold text-slate-800 dark:text-slate-100">Categories</h1>
+      <p class="text-sm text-slate-500 dark:text-slate-400">Manage job categories used for classifying posts.</p>
     </div>
   </div>
 
-  <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-slate-200">
-      <thead class="bg-slate-50">
-        <tr class="text-left text-slate-600 text-xs uppercase tracking-wider">
-          <th class="px-3 py-2">Name</th>
-          <th class="px-3 py-2">Slug</th>
-          <th class="px-3 py-2 text-right">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-slate-100">
-        @forelse($categories as $c)
-          <tr class="hover:bg-slate-50">
-            <td class="px-3 py-2 font-medium text-slate-800">{{ $c->name }}</td>
-            <td class="px-3 py-2 text-slate-600">{{ $c->slug }}</td>
-            <td class="px-3 py-2">
-              <div class="flex justify-end gap-2">
-                <a href="{{ route('admin.categories.edit',$c) }}" class="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 text-slate-700 hover:bg-slate-100 transition-base text-sm">Edit</a>
-                <form method="POST" action="{{ route('admin.categories.destroy',$c) }}" onsubmit="return confirm('Delete this category?');">
-                  @csrf @method('DELETE')
-                  <button class="inline-flex items-center gap-1 px-2 py-1 rounded border border-red-300 text-red-700 hover:bg-red-50 transition-base text-sm">Delete</button>
-                </form>
-              </div>
-            </td>
-          </tr>
-        @empty
-          <tr>
-            <td colspan="3" class="px-3 py-10 text-center text-slate-500">
-              No categories yet. Create your first one.
-            </td>
-          </tr>
-        @endforelse
-      </tbody>
-    </table>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    @forelse($categories as $c)
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 md:p-5 shadow-sm hover:shadow-md transition-base">
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <div class="font-medium text-slate-800 dark:text-white truncate">{{ $c->name }}</div>
+            <div class="mt-1 flex items-center gap-2 text-xs">
+              <span class="inline-flex items-center px-2 py-0.5 rounded border border-slate-200 text-slate-700 bg-slate-50 dark:border-slate-600 dark:text-slate-200 dark:bg-slate-800/40">{{ $c->slug }}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <a href="{{ route('admin.categories.edit',$c) }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700/40 transition-base text-sm">Edit</a>
+            <form method="POST" action="{{ route('admin.categories.destroy',$c) }}" onsubmit="return confirm('Delete this category?');">
+              @csrf @method('DELETE')
+              <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-red-300 text-red-700 hover:bg-red-50 dark:hover:bg-red-800/40 transition-base text-sm">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    @empty
+      <div class="text-sm text-slate-500 dark:text-slate-400">No categories yet. Create your first one.</div>
+    @endforelse
   </div>
 
   <div class="mt-4">
