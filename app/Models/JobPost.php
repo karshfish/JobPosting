@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Policies\JobsPolicy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[UsePolicy(JobsPolicy::class)]
 class JobPost extends Model
 {
 
@@ -31,7 +34,8 @@ class JobPost extends Model
         'qualifications' => 'array',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -40,10 +44,8 @@ class JobPost extends Model
     //     return $this->hasMany(JobApplication::class);
     // }
 
-        public function comments()
+    public function comments()
     {
         return $this->hasMany(Comment::class, 'job_id');
     }
-
 }
-

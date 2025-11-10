@@ -1,9 +1,13 @@
 <?php
+
 namespace App\Models;
 
+use App\Policies\CommentsPolicy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[UsePolicy(CommentsPolicy::class)]
 class Comment extends Model
 {
     use HasFactory;
