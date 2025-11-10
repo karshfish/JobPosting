@@ -1,21 +1,20 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\Candidate;
-use App\Models\User;
-use Spatie\Permission\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use App\Models\Job;
 
 use App\Models\Application;
+use App\Models\Candidate;
+use App\Models\Job;
+use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
     public function run(): void
     {
-
         // Create 10 users with candidate profiles
         Candidate::factory(10)->create();
 
@@ -25,10 +24,7 @@ class DatabaseSeeder extends Seeder
         // Create sample applications
         Application::factory(20)->create();
 
-        // Seed roles & permissions
-        $this->call(RolesSeeder::class);
-
-        // Ensure an admin user exists and has the admin role
+        // Ensure an admin user exists and has admin role (string column)
         $adminEmail = env('ADMIN_EMAIL', 'admin@example.com');
         $adminPassword = env('ADMIN_PASSWORD', 'password');
 
@@ -37,11 +33,13 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Admin',
                 'password' => bcrypt($adminPassword),
+                'role' => 'admin',
             ]
         );
 
-        if (! $admin->hasRole('admin')) {
-            $admin->assignRole('admin');
+        if ($admin->role !== 'admin') {
+            $admin->role = 'admin';
+            $admin->save();
         }
 
         // Optional: demo user
@@ -50,8 +48,9 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Test User',
                 'password' => bcrypt('password'),
+                'role' => 'candidate',
             ]
         );
-
     }
 }
+
