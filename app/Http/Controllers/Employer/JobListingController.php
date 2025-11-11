@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Employer;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\JobPost;
 use Illuminate\Http\Request;

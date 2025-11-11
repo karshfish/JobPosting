@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Employer;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreJobPostRequest;
 use App\Http\Requests\UpdateJobPostRequest;
