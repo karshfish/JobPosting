@@ -17,31 +17,48 @@
         @forelse($jobs as $job)
           <tr class="hover:bg-slate-50">
             <td class="px-3 py-2 font-medium text-slate-800">{{ $job->title }}</td>
-            <td class="px-3 py-2 text-slate-700">{{ $job->company->name ?? '-' }}</td>
+            <td class="px-3 py-2 text-slate-700">{{ $job->user->name ?? '-' }}</td>
             <td class="px-3 py-2">
               @php
-                $status = $job->status ?? 'pending';
-                $badge = [
-                  'accepted' => 'bg-green-100 text-green-800 border-green-200',
-                  'rejected' => 'bg-red-100 text-red-800 border-red-200',
-                  'pending'  => 'bg-amber-100 text-amber-800 border-amber-200',
-                ][$status] ?? 'bg-slate-100 text-slate-800 border-slate-200';
+                  $status = $job->status ?? 'draft';
+
+                  $badge = [
+                      'draft'     => 'bg-amber-100 text-amber-800 border-amber-200',  // pending review
+                      'published' => 'bg-green-100 text-green-800 border-green-200',  // approved
+                      'closed'    => 'bg-red-100 text-red-800 border-red-200',        // rejected/closed
+                  ][$status] ?? 'bg-slate-100 text-slate-800 border-slate-200';
               @endphp
-              <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded border {{ $badge }}">{{ ucfirst($status) }}</span>
+
+              <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded border {{ $badge }}">
+                  {{ ucfirst($status) }}
+              </span>
             </td>
             <td class="px-3 py-2">
               <div class="flex justify-end gap-2">
-                @if(($job->status ?? 'pending') !== 'accepted')
-                  <form method="POST" action="{{ route('admin.jobs.approve',$job) }}" class="inline">
+                {{-- If job is draft: show Approve + Reject --}}
+                @if(($job->status ?? 'draft') === 'draft')
+                  <form method="POST" action="{{ route('admin.jobs.approve', $job) }}" class="inline">
                     @csrf
-                    <button class="inline-flex items-center gap-1 px-2 py-1 rounded border border-green-300 text-green-700 hover:bg-green-50 transition-base text-sm">Approve</button>
+                    <button class="inline-flex items-center gap-1 px-2 py-1 rounded border border-green-300 text-green-700 hover:bg-green-50 transition-base text-sm">
+                      Approve
+                    </button>
                   </form>
-                @endif
-                @if(($job->status ?? 'pending') !== 'rejected')
-                  <form method="POST" action="{{ route('admin.jobs.reject',$job) }}" class="inline">
+
+                  <form method="POST" action="{{ route('admin.jobs.reject', $job) }}" class="inline">
                     @csrf
                     <input type="hidden" name="reason" value="Not suitable.">
-                    <button class="inline-flex items-center gap-1 px-2 py-1 rounded border border-red-300 text-red-700 hover:bg-red-50 transition-base text-sm">Reject</button>
+                    <button class="inline-flex items-center gap-1 px-2 py-1 rounded border border-red-300 text-red-700 hover:bg-red-50 transition-base text-sm">
+                      Reject
+                    </button>
+                  </form>
+                @elseif($job->status === 'published')
+                  {{-- If job is already published: maybe allow only reject --}}
+                  <form method="POST" action="{{ route('admin.jobs.reject', $job) }}" class="inline">
+                    @csrf
+                    <input type="hidden" name="reason" value="Not suitable.">
+                    <button class="inline-flex items-center gap-1 px-2 py-1 rounded border border-red-300 text-red-700 hover:bg-red-50 transition-base text-sm">
+                      Reject
+                    </button>
                   </form>
                 @endif
               </div>

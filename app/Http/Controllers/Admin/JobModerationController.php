@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -10,7 +9,7 @@ class JobModerationController extends Controller
 {
     public function index(Request $request)
     {
-        $jobs = JobPost::with('company')
+        $jobs = JobPost::with('user')   // ← بدل company بـ user
             ->latest('created_at')
             ->paginate(10);
 
@@ -19,8 +18,8 @@ class JobModerationController extends Controller
 
     public function pending(Request $request)
     {
-        $jobs = JobPost::with('company')
-            ->where('status', 'pending')
+        $jobs = JobPost::with('user')   // ← هنا برضه
+            ->where('status', 'draft')
             ->latest('created_at')
             ->paginate(10);
 
@@ -29,26 +28,26 @@ class JobModerationController extends Controller
 
     public function show(JobPost $job)
     {
-        $job->load(['company','category']);
+        $job->load('user');
+
         return view('admin.jobs.show', compact('job'));
     }
 
     public function approve(JobPost $job)
     {
         $job->update([
-            'status' => 'accepted',
-            'posted_at' => now(),
+            'status' => 'published',
         ]);
 
-        return back()->with('status', 'Job accepted successfully.');
+        return back()->with('status', 'Job published successfully.');
     }
 
     public function reject(Request $request, JobPost $job)
     {
         $job->update([
-            'status' => 'rejected',
+            'status' => 'closed',
         ]);
 
-        return back()->with('status', 'Job rejected.');
+        return back()->with('status', 'Job closed/rejected.');
     }
 }
