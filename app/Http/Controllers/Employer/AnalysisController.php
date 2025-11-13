@@ -12,6 +12,6 @@ class AnalysisController extends Controller
     public function index()
     {
 
-        return view('employer.analysis');
+        return view('employer.analysis.analysis');
     }
 }
