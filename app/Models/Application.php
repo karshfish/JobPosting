@@ -19,6 +19,7 @@ class Application extends Model
         'job_id',
         'resume',
         'status',
+        'phone',
     ];
 
     // بدل candidate نستخدم user

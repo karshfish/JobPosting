@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class CandidateController extends Controller
 {
     use AuthorizesRequests;
+
     // Dashboard
     public function dashboard()
     {
@@ -46,16 +47,55 @@ class CandidateController extends Controller
 
         $user->phone = $request->phone;
         $user->address = $request->address;
-        $user->save();
+        // $user->save();
 
         return back()->with('success', 'Profile updated.');
     }
 
-    // Jobs
-    public function jobPosts()
+    // Jobs - صفحة Job Posts مع الإحصائيات والفلاتر
+    public function showJob(JobPost $job)
     {
-        $jobs = JobPost::latest()->paginate(5);
-        return view('candidate.job-posts', compact('jobs'));
+        return view('candidate.show-job-posts', compact('job'));
+    }
+    public function jobPosts(Request $request)
+    {
+        // Base query
+        $query = JobPost::query();
+
+        // Filters
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('from')) {
+            $query->whereDate('created_at', '>=', $request->from);
+        }
+        if ($request->filled('to')) {
+            $query->whereDate('created_at', '<=', $request->to);
+        }
+
+        // Paginated jobs for grid
+        $jobs = $query->latest()->paginate(5)->withQueryString();
+
+        // Stats
+        $totalJobs = JobPost::count();
+        $publishedJobs = JobPost::where('status', 'published')->count();
+        $draftJobs = JobPost::where('status', 'draft')->count();
+        $closedJobs = JobPost::where('status', 'closed')->count();
+
+        // Latest jobs for table
+        $latestJobs = $query->latest()->paginate(5);
+
+        return view('candidate.job-posts', compact(
+            'jobs',
+            'totalJobs',
+            'publishedJobs',
+            'draftJobs',
+            'closedJobs',
+            'latestJobs'
+        ));
     }
 
     public function showApplyForm(JobPost $job)
@@ -69,6 +109,7 @@ class CandidateController extends Controller
         $user = Auth::user();
 
         $request->validate([
+            'phone' => 'required|string|max:50',
             'resume' => 'nullable|mimes:pdf|max:2048',
         ]);
 
@@ -80,11 +121,31 @@ class CandidateController extends Controller
         Application::create([
             'user_id' => $user->id,
             'job_id' => $job->id,
+            'phone' => $request->phone,
             'resume' => $resume,
             'status' => 'pending',
         ]);
 
         return redirect()->route('candidate.applications')->with('success', 'Application submitted.');
+    }
+
+    public function applyViaLinkedIn(JobPost $job)
+    {
+        $user = Auth::user();
+
+        // Simulation for LinkedIn integration
+        $linkedinPhone = $user->phone ?? '01000000000';
+        $linkedinResume = $user->resume ?? null;
+
+        Application::create([
+            'user_id' => $user->id,
+            'job_id' => $job->id,
+            'phone' => $linkedinPhone,
+            'resume' => $linkedinResume,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->route('candidate.applications')->with('success', 'Applied via LinkedIn!');
     }
 
     // Applications CRUD
@@ -113,18 +174,20 @@ class CandidateController extends Controller
 
         $request->validate([
             'resume' => 'nullable|mimes:pdf|max:2048',
-            'status' => 'required|in:pending,accepted,rejected',
+            'phone' => 'nullable|string|max:50',
         ]);
+
+        $application->phone = $request->phone;
 
         if ($request->hasFile('resume')) {
             $application->resume = $request->file('resume')->store('resumes', 'public');
         }
 
-        $application->status = $request->status;
         $application->save();
 
         return back()->with('success', 'Application updated.');
     }
+
 
     public function deleteApplication(Application $application)
     {
