@@ -10,46 +10,51 @@ use Illuminate\Database\Eloquent\Model;
 #[UsePolicy(JobsPolicy::class)]
 class JobPost extends Model
 {
-
     /** @use HasFactory<\Database\Factories\JobPostFactory> */
     use HasFactory;
+
     protected $fillable = [
         'user_id',
+        'category_id',
         'title',
         'description',
         'responsibilities',
         'skills',
         'qualifications',
-        'salary_range',
+        'technologies',
+        'salary_min',
+        'salary_max',
         'benefits',
-        'category',
         'location',
         'work_type',
         'branding_image',
         'application_deadline',
         'status',
     ];
+
     protected $casts = [
         'skills' => 'array',
         'qualifications' => 'array',
+        'technologies' => 'array',
+        'benefits' => 'array',
+        'application_deadline' => 'date',
     ];
 
+    // Relations
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-
     public function applications()
     {
         return $this->hasMany(Application::class, 'job_id');
     }
-
-
 
     public function comments()
     {
