@@ -108,8 +108,10 @@ class JobPostController extends Controller
      */
     public function edit(JobPost $job)
 {
-    return view('employer.jobs.edit', compact('job'));
+    $categories = Category::all();
+    return view('employer.jobs.edit', compact('job', 'categories'));
 }
+
 
 public function update(UpdateJobPostRequest $request, JobPost $job)
 {
@@ -131,8 +133,12 @@ public function update(UpdateJobPostRequest $request, JobPost $job)
      */
     public function destroy(JobPost $job)
     {
-        $job->delete();
 
+       if ($job->branding_image && file_exists(storage_path('app/public/storage/' . $job->branding_image))) {
+            unlink(storage_path('app/public/' . $job->branding_image));
+        }
+
+        $job->delete();
         return redirect()->route('jobs.index')
             ->with('success', 'Job deleted successfully!');
     }

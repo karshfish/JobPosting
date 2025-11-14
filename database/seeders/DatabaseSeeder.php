@@ -51,6 +51,13 @@ class DatabaseSeeder extends Seeder
                 'role' => 'candidate',
             ]
         );
+
+         // Call your seeders here
+        $this->call([
+            UserSeeder::class,
+            CategorySeeder::class,
+            JobPostSeeder::class,
+        ]);
     }
 }
 
