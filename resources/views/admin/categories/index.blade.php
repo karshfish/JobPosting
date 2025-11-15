@@ -40,6 +40,6 @@
   </div>
 
   <div class="mt-4">
-    {{ $categories->links() }}
+    {{ $categories->onEachSide(1)->links('pagination::simple-tailwind') }}
   </div>
 @endsection

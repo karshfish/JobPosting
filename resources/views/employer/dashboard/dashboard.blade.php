@@ -126,6 +126,7 @@
             @endforeach
         </div>
 
+
         {{-- Recent Jobs Table --}}
 <div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden">
     <!-- Header -->
@@ -134,6 +135,44 @@
         <a href="{{ route('jobs.index') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
             View all
         </a>
+
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+            <tbody class="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
+                @forelse($latestJobs as $job)
+                    <tr class="hover:bg-gray-50 dark:hover:bg-slate-700 transition">
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{{ $job->title }}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                @if($job->status == 'published') bg-green-100 text-green-800
+                                @elseif($job->status == 'draft') bg-yellow-100 text-yellow-800
+                                @else bg-red-100 text-red-800
+                                @endif">
+                                {{ ucfirst($job->status) }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">
+                            {{ $job->created_at->format('d M Y') }}
+                        </td>
+                        <td class="px-6 py-4 text-right text-sm font-medium">
+                            <a href="{{ route('jobs.show', $job) }}" class="text-indigo-600 hover:text-indigo-900 dark:hover:text-indigo-400 mr-3">View</a>
+                            <a href="{{ route('jobs.edit', $job) }}" class="text-indigo-600 hover:text-indigo-900 dark:hover:text-indigo-400">Edit</a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">No jobs found</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        {{-- Pagination --}}
+        @if($latestJobs->hasPages())
+            <div class="px-6 py-4">
+                {{ $latestJobs->onEachSide(1)->links('pagination::simple-tailwind') }}
+            </div>
+        @endif
+
     </div>
 
     <!-- Table -->

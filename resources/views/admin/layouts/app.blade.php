@@ -19,9 +19,9 @@
   <style>
     /* Smooth hover transitions for nav & buttons */
     .transition-base { transition: all .15s ease-in-out; }
-    /* Collapsible sidebar behavior on desktop */
-    .sidebar.collapsed { width: 4rem; }
-    .sidebar .sidebar-label { display: inline; }
+    /* Collapsible sidebar behavior on desktop (match employer layout) */
+    .sidebar.collapsed { width: 5rem; }
+    .sidebar .sidebar-label { display: inline; font-weight: 600; }
     .sidebar.collapsed .sidebar-label { display: none; }
     .sidebar.collapsed .logo-text { display: none; }
     .sidebar .nav-icon { width: 1.5rem; height: 1.5rem; }
@@ -41,8 +41,11 @@
     <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 z-40 w-64 -translate-x-full md:translate-x-0 md:static md:flex bg-white dark:bg-slate-900/50 border-r border-slate-200 dark:border-slate-800 flex-col transition-transform duration-150 ease-in-out">
       <div class="h-16 px-4 md:px-6 flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 min-w-0">
-          <img src="{{ asset('assets/logo.png') }}" alt="Logo" class="h-12 w-auto">
-          <span class="logo-text text-lg font-bold text-slate-800 dark:text-slate-100 truncate">Admin</span>
+          <img src="{{ asset('assets/logo.jpg') }}" alt="HireHup logo" class="h-8 w-auto rounded">
+          <span class="logo-text text-xl font-extrabold tracking-tight text-gray-800 dark:text-slate-100 truncate">
+            <span class="text-indigo-600">Hire</span>
+            <span class="dark:text-white">Hup</span>
+          </span>
         </a>
         <button id="sidebar-close" type="button" class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-base" aria-label="Close sidebar">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -61,9 +64,18 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3.75A2.25 2.25 0 0 1 11.25 1.5h1.5A2.25 2.25 0 0 1 15 3.75V6h3.75A2.25 2.25 0 0 1 21 8.25v9A2.25 2.25 0 0 1 18.75 19.5H5.25A2.25 2.25 0 0 1 3 17.25v-9A2.25 2.25 0 0 1 5.25 6H9V3.75Zm1.5 0V6h3V3.75a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75Z"/></svg>
           <span class="sidebar-label">Jobs</span>
         </a>
+        <a href="{{ route('admin.applications.index') }}"
+           class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md {{ request()->routeIs('admin.applications.*') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50' }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 8.25V7.5A2.25 2.25 0 0 1 6 5.25h12A2.25 2.25 0 0 1 20.25 7.5v.75m-16.5 0h16.5m-16.5 0 1.5 8.25A2.25 2.25 0 0 0 7.5 18.75h9a2.25 2.25 0 0 0 2.25-1.95l1.5-8.25" />
+          </svg>
+          <span class="sidebar-label">Applications</span>
+        </a>
         <a href="{{ route('admin.categories.index') }}"
            class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md {{ request()->routeIs('admin.categories.*') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50' }}">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25A2.25 2.25 0 0 1 6 3h12a2.25 2.25 0 0 1 2.25 2.25V9A2.25 2.25 0 0 1 18 11.25H6A2.25 2.25 0 0 1 3.75 9V5.25ZM3.75 15A2.25 2.25 0 0 1 6 12.75h12A2.25 2.25 0 0 1 20.25 15v3.75A2.25 2.25 0 0 1 18 21H6a2.25 2.25 0 0 1-2.25-2.25V15Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 4.5h6v6h-6v-6zM13.5 4.5h6v6h-6v-6zM4.5 13.5h6v6h-6v-6zM13.5 13.5h6v6h-6v-6z" />
+          </svg>
           <span class="sidebar-label">Categories</span>
         </a>
         <!-- Companies nav removed from admin -->
@@ -109,16 +121,20 @@
     <!-- Main -->
     <div class="flex-1 flex flex-col min-w-0">
       <header class="sticky top-0 z-30 h-16 bg-white dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800 px-4 md:px-6 flex items-center justify-between shadow-sm animate-scale-in">
-        <div class="flex items-center gap-2">
-          <!-- Sidebar toggler -->
-          <button id="sidebar-open" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-base" aria-label="Open sidebar">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-          </button>
-          <img src="{{ asset('assets/logo.png') }}" alt="Logo" class="h-10 w-auto">
-          <span class="font-semibold text-slate-800 dark:text-slate-100">Admin</span>
-        </div>
+          <div class="flex items-center gap-2">
+            <!-- Sidebar toggler -->
+            <button id="sidebar-open" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-base" aria-label="Open sidebar">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+            </button>
+            <div class="flex items-center space-x-2">
+              <img src="{{ asset('assets/logo.jpg') }}" alt="HireHup logo" class="h-8 w-auto rounded">
+              <span class="text-2xl font-extrabold tracking-tight text-gray-800 dark:text-slate-100">
+                <span class="text-indigo-600">Hire</span><span class="dark:text-white">Hup</span>
+              </span>
+            </div>
+          </div>
         <div class="flex items-center gap-3">
           <button id="theme-toggle" type="button" class="transition-base inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 text-sm">
             <span class="theme-toggle-light hidden">Light</span>

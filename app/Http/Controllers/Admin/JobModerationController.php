@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -9,26 +10,45 @@ class JobModerationController extends Controller
 {
     public function index(Request $request)
     {
-        $jobs = JobPost::with('user')   // ← بدل company بـ user
+        $jobs = JobPost::with(['user', 'category'])
+            ->withCount('applications')
             ->latest('created_at')
             ->paginate(10);
 
-        return view('admin.jobs.index', compact('jobs'));
+        $statusCounts = [
+            'draft' => JobPost::where('status', 'draft')->count(),
+            'published' => JobPost::where('status', 'published')->count(),
+            'closed' => JobPost::where('status', 'closed')->count(),
+        ];
+
+        $viewMode = 'all';
+
+        return view('admin.jobs.index', compact('jobs', 'statusCounts', 'viewMode'));
     }
 
     public function pending(Request $request)
     {
-        $jobs = JobPost::with('user')   // ← هنا برضه
+        $jobs = JobPost::with(['user', 'category'])
+            ->withCount('applications')
             ->where('status', 'draft')
             ->latest('created_at')
             ->paginate(10);
 
-        return view('admin.jobs.index', compact('jobs'));
+        $statusCounts = [
+            'draft' => JobPost::where('status', 'draft')->count(),
+            'published' => JobPost::where('status', 'published')->count(),
+            'closed' => JobPost::where('status', 'closed')->count(),
+        ];
+
+        $viewMode = 'draft';
+
+        return view('admin.jobs.index', compact('jobs', 'statusCounts', 'viewMode'));
     }
 
     public function show(JobPost $job)
     {
-        $job->load('user');
+        $job->load(['user', 'category'])
+            ->loadCount('applications');
 
         return view('admin.jobs.show', compact('job'));
     }
@@ -51,3 +71,4 @@ class JobModerationController extends Controller
         return back()->with('status', 'Job closed/rejected.');
     }
 }
+
