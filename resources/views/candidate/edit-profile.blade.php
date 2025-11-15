@@ -18,6 +18,28 @@
             <form action="{{ route('candidate.updateProfile') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 @method('PUT')
+                {{-- Profile Photo --}}
+                <div class="flex flex-col items-center mb-6">
+                    {{-- Current Photo --}}
+                    @if($user->profile_photo_path)
+                    <img src="{{ asset('storage/' . $user->profile_photo_path) }}"
+                        class="w-32 h-32 rounded-full object-cover border shadow mb-3">
+                    @else
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&size=128"
+                        class="w-32 h-32 rounded-full object-cover border shadow mb-3">
+                    @endif
+
+                    <!-- <label class="block text-sm font-semibold text-gray-800 mb-2">🖼 Profile Photo</label> -->
+                    <input type="file"
+                        name="profile_photo"
+                        accept="image/*"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg
+                focus:ring-2 focus:ring-blue-400 focus:outline-none transition">
+
+                    @error('profile_photo')
+                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
                 {{-- Name --}}
                 <div>
@@ -41,8 +63,8 @@
                     @enderror
                 </div>
 
-                {{-- Phone --}}
-                <div>
+                <!-- {{-- Phone --}} -->
+                <!-- <div>
                     <label class="block text-sm font-semibold text-gray-800 mb-2">📞 Phone</label>
                     <input type="text" name="phone" value="{{ old('phone', $user->phone) }}"
                         placeholder="Enter your phone number"
@@ -50,9 +72,9 @@
                     @error('phone')
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
-                </div>
+                </div> -->
 
-                {{-- Address --}}
+                <!-- {{-- Address --}}
                 <div>
                     <label class="block text-sm font-semibold text-gray-800 mb-2">🏠 Address</label>
                     <input type="text" name="address" value="{{ old('address', $user->address) }}"
@@ -61,9 +83,9 @@
                     @error('address')
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
-                </div>
+                </div> -->
 
-                {{-- Resume Upload --}}
+                <!-- {{-- Resume Upload --}}
                 <div>
                     <label class="block text-sm font-semibold text-gray-800 mb-2">📄 Resume (PDF)</label>
                     <input type="file" name="resume" accept="application/pdf"
@@ -78,7 +100,7 @@
                     @error('resume')
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
-                </div>
+                </div> -->
 
                 {{-- Buttons --}}
                 <div class="flex justify-between items-center mt-8">

@@ -17,7 +17,7 @@ class ApplicationSeeder extends Seeder
         foreach ($users as $user) {
             foreach ($jobs->random(2) as $job) {
                 Application::create([
-                    'candidate_id' => $user->id,
+                    'user_id' => $user->id,
                     'job_id' => $job->id,
                     'resume' => null,
                     'status' => 'pending',

@@ -5,6 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Employer Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-dXU+uF1Rj8rFZ/1gO3+eQ6zzNNpJ3ytH4zVZT0x5Xp+3aV+YxJcfH3xvQnE8X6xkF/TZPo3q1TLZsN1h/0ZT0Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <script>
         // Set initial theme early to avoid FOUC (only light/dark)
         (function() {
@@ -131,8 +135,8 @@
                 </a>
 
                 <!-- Create Job -->
-               <a href="{{ route('jobs.create') }}"
-                class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md
+                <a href="{{ route('jobs.create') }}"
+                    class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md
                         {{ request()->routeIs('jobs.create')
                             ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
                             : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-blue-700 dark:hover:text-blue-300' }}">
@@ -194,37 +198,37 @@
 
             <div class="sidebar-footer px-4 py-2 border-t border-slate-200 dark:border-slate-800">
                 @if (auth()->check())
-                    <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Your name : <span
-                            class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->name ?: 'none' }}</span>
-                   </div>
-                    <div class="text-xs text-slate-500 my-2 dark:text-slate-400 mb-1">Your email : <span
-                            class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->email ?: 'none' }}</span>
-                   </div>
-                    <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Your role : <span
-                            class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->role ?: 'none' }}</span>
-                   </div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Your name : <span
+                        class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->name ?: 'none' }}</span>
+                </div>
+                <div class="text-xs text-slate-500 my-2 dark:text-slate-400 mb-1">Your email : <span
+                        class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->email ?: 'none' }}</span>
+                </div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Your role : <span
+                        class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->role ?: 'none' }}</span>
+                </div>
 
-                    <div class="py-3 flex items-center justify-center gap-3" x-data="{ profileOpen: false, darkMode: localStorage.theme === 'dark' }" x-init="if (darkMode) document.documentElement.classList.add('dark');
+                <div class="py-3 flex items-center justify-center gap-3" x-data="{ profileOpen: false, darkMode: localStorage.theme === 'dark' }" x-init="if (darkMode) document.documentElement.classList.add('dark');
                     else document.documentElement.classList.remove('dark');">
 
-                        <!-- 🌗 Theme Toggle -->
-                        <button
-                            @click="
+                    <!-- 🌗 Theme Toggle -->
+                    <button
+                        @click="
             darkMode = !darkMode;
             localStorage.theme = darkMode ? 'dark' : 'light';
             document.documentElement.classList.toggle('dark', darkMode);
         "
-                            class="inline-flex w-[90%] justify-center items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-700
+                        class="inline-flex w-[90%] justify-center items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-700
                text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50
                text-sm font-medium transition-all duration-200">
-                            <template x-if="darkMode">
-                                <span>☀️ Light</span>
-                            </template>
-                            <template x-if="!darkMode">
-                                <span>🌙 Dark</span>
-                            </template>
-                        </button>
-                    </div>
+                        <template x-if="darkMode">
+                            <span>☀️ Light</span>
+                        </template>
+                        <template x-if="!darkMode">
+                            <span>🌙 Dark</span>
+                        </template>
+                    </button>
+                </div>
                 @endif
                 <div class="mt-3 text-[11px] text-slate-500 dark:text-slate-400">&copy; {{ date('Y') }} JobPosting
                 </div>
@@ -319,22 +323,22 @@
 
             <main class="p-4 md:p-6 max-w-7xl mx-auto w-full animate-fade-in">
                 @if (session('status'))
-                    <div
-                        class="mb-4 rounded-md border border-green-200 dark:border-green-900 bg-green-50 dark:bg-emerald-900/30 text-green-800 dark:text-emerald-200 px-4 py-3">
-                        {{ session('status') }}
-                    </div>
+                <div
+                    class="mb-4 rounded-md border border-green-200 dark:border-green-900 bg-green-50 dark:bg-emerald-900/30 text-green-800 dark:text-emerald-200 px-4 py-3">
+                    {{ session('status') }}
+                </div>
                 @endif
 
                 @if ($errors->any())
-                    <div
-                        class="mb-4 rounded-md border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200 px-4 py-3">
-                        <div class="font-semibold mb-1">There were some problems with your input:</div>
-                        <ul class="list-disc list-inside text-sm">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+                <div
+                    class="mb-4 rounded-md border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200 px-4 py-3">
+                    <div class="font-semibold mb-1">There were some problems with your input:</div>
+                    <ul class="list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
                 @endif
 
                 <div

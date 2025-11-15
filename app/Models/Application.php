@@ -15,14 +15,13 @@ class Application extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', // يبقى user_id
+        'user_id',
         'job_id',
         'resume',
         'status',
         'phone',
     ];
 
-    // بدل candidate نستخدم user
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
