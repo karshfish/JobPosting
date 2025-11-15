@@ -12,7 +12,9 @@ class CandidateController extends Controller
 {
     use AuthorizesRequests;
 
+    // ------------------------------
     // Dashboard
+    // ------------------------------
     public function dashboard()
     {
         $user = Auth::user();
@@ -24,7 +26,9 @@ class CandidateController extends Controller
         return view('candidate.dashboard', compact('user', 'applications'));
     }
 
+    // ------------------------------
     // Profile
+    // ------------------------------
     public function editProfile()
     {
         $user = Auth::user();
@@ -36,57 +40,87 @@ class CandidateController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'phone' => 'nullable|string|max:50',
-            'address' => 'nullable|string|max:255',
-            'resume' => 'nullable|mimes:pdf|max:2048',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png',
+
         ]);
 
-        if ($request->hasFile('resume')) {
-            $user->resume = $request->file('resume')->store('resumes', 'public');
+        if ($request->hasFile('profile_photo')) {
+            $user->profile_photo_path = $request->file('profile_photo')->store('profile-photos', 'public');
         }
 
-        $user->phone = $request->phone;
-        $user->address = $request->address;
-        // $user->save();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
 
         return back()->with('success', 'Profile updated.');
     }
 
-    // Jobs - صفحة Job Posts مع الإحصائيات والفلاتر
+    // ------------------------------
+    // Show Job
+    // ------------------------------
     public function showJob(JobPost $job)
     {
         return view('candidate.show-job-posts', compact('job'));
     }
+
+    // ------------------------------
+    // Job Posts + Filters
+    // ------------------------------
     public function jobPosts(Request $request)
     {
-        // Base query
         $query = JobPost::query();
 
-        // Filters
+        // Search by title
         if ($request->filled('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
+
+        // Filter by status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
-        if ($request->filled('from')) {
-            $query->whereDate('created_at', '>=', $request->from);
-        }
-        if ($request->filled('to')) {
-            $query->whereDate('created_at', '<=', $request->to);
+
+        // Filter by location
+        if ($request->filled('location')) {
+            $query->where('location', 'like', '%' . $request->location . '%');
         }
 
-        // Paginated jobs for grid
+        // Filter by work type
+        if ($request->filled('work_type')) {
+            $query->where('work_type', $request->work_type);
+        }
+
+        // Filter by date posted
+        if ($request->filled('date')) {
+            switch ($request->date) {
+                case 'today':
+                    $query->whereDate('created_at', now());
+                    break;
+                case 'week':
+                    $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+                    break;
+                case 'month':
+                    $query->whereMonth('created_at', now()->month);
+                    break;
+            }
+        }
+
+        // Clone for stats
+        $statsQuery = clone $query;
+
+        // Paginate jobs
         $jobs = $query->latest()->paginate(5)->withQueryString();
 
         // Stats
-        $totalJobs = JobPost::count();
-        $publishedJobs = JobPost::where('status', 'published')->count();
-        $draftJobs = JobPost::where('status', 'draft')->count();
-        $closedJobs = JobPost::where('status', 'closed')->count();
+        $totalJobs     = $statsQuery->count();
+        $publishedJobs = $statsQuery->where('status', 'published')->count();
+        $draftJobs     = $statsQuery->where('status', 'draft')->count();
+        $closedJobs    = $statsQuery->where('status', 'closed')->count();
 
-        // Latest jobs for table
-        $latestJobs = $query->latest()->paginate(5);
+        // Latest 5 jobs
+        $latestJobs = $statsQuery->latest()->take(5)->get();
 
         return view('candidate.job-posts', compact(
             'jobs',
@@ -98,9 +132,28 @@ class CandidateController extends Controller
         ));
     }
 
+
+    // ------------------------------
+    // Apply
+    // ------------------------------
     public function showApplyForm(JobPost $job)
     {
         $user = Auth::user();
+
+        // Check if job is not published
+        if ($job->status !== 'published') {
+            return back()->with('error', 'You cannot apply to this job because it is not published.');
+        }
+
+        // Check if user already applied
+        $alreadyApplied = Application::where('user_id', $user->id)
+            ->where('job_id', $job->id)
+            ->exists();
+
+        if ($alreadyApplied) {
+            return back()->with('error', 'You have already applied for this job.');
+        }
+
         return view('candidate.apply', compact('job', 'user'));
     }
 
@@ -108,16 +161,33 @@ class CandidateController extends Controller
     {
         $user = Auth::user();
 
+        // Prevent apply if job not published
+        if ($job->status !== 'published') {
+            return back()->with('error', 'You cannot apply because this job is not published.');
+        }
+
+        // Prevent duplicate application
+        $alreadyApplied = Application::where('user_id', $user->id)
+            ->where('job_id', $job->id)
+            ->exists();
+
+        if ($alreadyApplied) {
+            return back()->with('error', 'You already applied to this job.');
+        }
+
+        // Validation
         $request->validate([
             'phone' => 'required|string|max:50',
             'resume' => 'nullable|mimes:pdf|max:2048',
         ]);
 
         $resume = $user->resume;
+
         if ($request->hasFile('resume')) {
             $resume = $request->file('resume')->store('resumes', 'public');
         }
 
+        // Create application
         Application::create([
             'user_id' => $user->id,
             'job_id' => $job->id,
@@ -126,14 +196,16 @@ class CandidateController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('candidate.applications')->with('success', 'Application submitted.');
+        return redirect()->route('candidate.applications')
+            ->with('success', 'Application submitted successfully.');
     }
 
+
+    // LinkedIn Auto Apply (Fake / Simulation)
     public function applyViaLinkedIn(JobPost $job)
     {
         $user = Auth::user();
 
-        // Simulation for LinkedIn integration
         $linkedinPhone = $user->phone ?? '01000000000';
         $linkedinResume = $user->resume ?? null;
 
@@ -148,11 +220,17 @@ class CandidateController extends Controller
         return redirect()->route('candidate.applications')->with('success', 'Applied via LinkedIn!');
     }
 
+    // ------------------------------
     // Applications CRUD
+    // ------------------------------
     public function applications()
     {
         $user = Auth::user();
-        $applications = Application::where('user_id', $user->id)->with('job')->latest()->get();
+        $applications = Application::where('user_id', $user->id)
+            ->with('job')
+            ->latest()
+            ->get();
+
         return view('candidate.applications', compact('applications'));
     }
 
@@ -188,7 +266,6 @@ class CandidateController extends Controller
         return back()->with('success', 'Application updated.');
     }
 
-
     public function deleteApplication(Application $application)
     {
         if ($application->user_id !== Auth::id()) {
@@ -196,6 +273,7 @@ class CandidateController extends Controller
         }
 
         $application->delete();
+
         return back()->with('success', 'Application deleted.');
     }
 }

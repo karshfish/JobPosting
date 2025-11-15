@@ -5,6 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Employer Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-dXU+uF1Rj8rFZ/1gO3+eQ6zzNNpJ3ytH4zVZT0x5Xp+3aV+YxJcfH3xvQnE8X6xkF/TZPo3q1TLZsN1h/0ZT0Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <script>
         // Set initial theme early to avoid FOUC (only light/dark)
         (function() {
@@ -131,8 +135,8 @@
                 </a>
 
                 <!-- Create Job -->
-               <a href="{{ route('jobs.create') }}"
-                class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md
+                <a href="{{ route('jobs.create') }}"
+                    class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md
                         {{ request()->routeIs('jobs.create')
                             ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
                             : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-blue-700 dark:hover:text-blue-300' }}">
@@ -365,6 +369,25 @@
             </header>
 
             <main class="p-4 md:p-6 max-w-7xl mx-auto w-full animate-fade-in">
+                @if (session('status'))
+                <div
+                    class="mb-4 rounded-md border border-green-200 dark:border-green-900 bg-green-50 dark:bg-emerald-900/30 text-green-800 dark:text-emerald-200 px-4 py-3">
+                    {{ session('status') }}
+                </div>
+                @endif
+
+                @if ($errors->any())
+                <div
+                    class="mb-4 rounded-md border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200 px-4 py-3">
+                    <div class="font-semibold mb-1">There were some problems with your input:</div>
+                    <ul class="list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
                 <div
                     class="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 shadow-sm rounded-lg p-4 md:p-6 transition-all duration-200 hover:shadow-md">
                     @yield('content')
