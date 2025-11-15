@@ -108,7 +108,12 @@
             <tbody class="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
                 @forelse($latestApplication as $application)
                     <tr class="hover:bg-gray-50 dark:hover:bg-slate-700 transition">
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{{ $application->job->title }}</td>
+                        <td class="px-6 py-4 text-sm font-medium">
+                            <a href="{{ route('Applications.show', $application) }}"
+                               class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-300 dark:hover:text-indigo-200">
+                                {{ $application->job->title }}
+                            </a>
+                        </td>
                         <td class="px-6 py-4">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                 @if($application->status == 'Accepted') bg-green-100 text-green-800

@@ -16,33 +16,63 @@ class JobPostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+   public function index(Request $request)
 {
-    // Base query with eager loading
-    $query = JobPost::with(['user', 'category'])->latest();
+    $query = JobPost::query();
 
-    // Filter by status if provided
-    if ($request->filled('status')) {
-        $query->where('status', $request->status);
+    // Keywords
+    if ($request->filled('keywords')) {
+        $query->where('title', 'like', '%'.$request->keywords.'%')
+              ->orWhere('description', 'like', '%'.$request->keywords.'%');
     }
 
-    // Paginate results
-    $jobPosts = $query->paginate(10)->withQueryString();
+    // Location
+    if ($request->filled('location')) {
+        $query->where('location', 'like', '%'.$request->location.'%');
+    }
 
-    // Counts for Quick Filters (efficient way)
-    $statusCounts = JobPost::selectRaw('status, COUNT(*) as count')
-        ->groupBy('status')
-        ->pluck('count', 'status');
+    // Category
+    if ($request->filled('category')) {
+        $query->where('category_id', $request->category);
+    }
+
+    // Salary Range
+    if ($request->filled('salary')) {
+    $salary = $request->salary;
+
+    $query->where(function ($q) use ($salary) {
+        $q->where('salary_min', '<=', $salary)
+          ->where('salary_max', '>=', $salary);
+    });
+}
+
+
+
+    // Date Posted
+    if ($request->filled('date_posted')) {
+        if ($request->date_posted == 'today') {
+            $query->whereDate('created_at', now());
+        } elseif ($request->date_posted == 'week') {
+            $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($request->date_posted == 'month') {
+            $query->whereMonth('created_at', now()->month);
+        }
+    }
+
+     $jobPosts = $query->paginate(10);
+
+    $categories = Category::all(); // <-- add this
 
     $allCount = JobPost::count();
-    $publishedCount = $statusCounts['published'] ?? 0;
-    $draftCount = $statusCounts['draft'] ?? 0;
-    $closedCount = $statusCounts['closed'] ?? 0;
-    
+    $publishedCount = JobPost::where('status', 'published')->count();
+    $draftCount = JobPost::where('status', 'draft')->count();
+    $closedCount = JobPost::where('status', 'closed')->count();
+
     return view('employer.jobs.index', compact(
-        'jobPosts', 'allCount', 'publishedCount', 'draftCount', 'closedCount'
+        'jobPosts', 'categories', 'allCount', 'publishedCount', 'draftCount', 'closedCount'
     ));
 }
+
 
 
     /**

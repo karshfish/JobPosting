@@ -159,21 +159,37 @@
                         </div>
 
                         <!-- Right: Apply Button -->
-                        <div class="flex justify-start md:justify-end">
-                            @php
-                                $user = auth()->user();
-                                $applied =
-                                    $user && $user->candidate
-                                        ? $user->candidate->applications()->where('job_id', $post->id)->exists()
-                                        : false;
-                            @endphp
+<div class="flex justify-start md:justify-end">
+    @php
+        $user = auth()->user();
+        $applied = $user && $user->candidate
+            ? $user->candidate->applications()->where('job_id', $post->id)->exists()
+            : false;
 
-                            <a href="{{ $applied ? '#' : route('candidate.jobs.apply', $post) }}"
-                                class="px-6 py-2 font-semibold rounded-lg transition
-   {{ $applied ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700' }}">
-                                {{ $applied ? 'Already Applied' : 'Apply' }}
-                            </a>
-                        </div>
+        $notPublished = $post->status !== 'published';
+    @endphp
+
+    <a href="{{ ($applied || $notPublished) ? '#' : route('candidate.jobs.apply', $post) }}"
+        class="px-6 py-2 font-semibold rounded-lg transition
+            @if($notPublished)
+                bg-gray-300 text-gray-600 cursor-not-allowed
+            @elseif($applied)
+                bg-gray-400 text-white cursor-not-allowed
+            @else
+                bg-blue-600 text-white hover:bg-blue-700
+            @endif"
+        @if($applied || $notPublished) onclick="return false;" @endif
+    >
+        @if($notPublished)
+            Not Available
+        @elseif($applied)
+            Already Applied
+        @else
+            Apply
+        @endif
+    </a>
+</div>
+
                     </div>
 
 

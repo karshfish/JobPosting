@@ -127,101 +127,99 @@
         </div>
 
         {{-- Recent Jobs Table --}}
-<div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden">
-    <!-- Header -->
-    <div class="flex items-center justify-between p-5 border-b border-gray-200 dark:border-slate-700">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Job Posts</h3>
-        <a href="{{ route('jobs.index') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-            View all
-        </a>
-    </div>
+        <di class="bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-5 border-b border-gray-200 dark:border-slate-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Job Posts</h3>
+                <a href="{{ route('jobs.index') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                    View all
+                </a>
+            </div>
 
-    <!-- Table -->
-    <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
-        <thead class="bg-gray-50 dark:bg-slate-700">
-            <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Title</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Created</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
-            </tr>
-        </thead>
-        <tbody class="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
-            @forelse($latestJobs as $job)
-                <tr class="hover:bg-gray-50 dark:hover:bg-slate-700 transition">
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{{ $job->title }}</td>
-                    
-                    <!-- Status Badge -->
-                    <td class="px-6 py-4">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                            @if ($job->status == 'published') bg-green-100 text-green-800
-                            @elseif($job->status == 'draft') bg-yellow-100 text-yellow-800
-                            @else bg-red-100 text-red-800 @endif">
-                            {{ ucfirst($job->status) }}
-                        </span>
-                    </td>
+            <!-- Table -->
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+                <thead class="bg-gray-50 dark:bg-slate-700">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Title</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Created</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
+                    @forelse($latestJobs as $job)
+                        <tr class="hover:bg-gray-50 dark:hover:bg-slate-700 transition">
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{{ $job->title }}</td>
+                            
+                            <!-- Status Badge -->
+                            <td class="px-6 py-4">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                    @if ($job->status == 'published') bg-green-100 text-green-800
+                                    @elseif($job->status == 'draft') bg-yellow-100 text-yellow-800
+                                    @else bg-red-100 text-red-800 @endif">
+                                    {{ ucfirst($job->status) }}
+                                </span>
+                            </td>
 
-                    <!-- Created Date -->
-                    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">
-                        {{ $job->created_at->format('d M Y') }}
-                    </td>
+                            <!-- Created Date -->
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">
+                                {{ $job->created_at->format('d M Y') }}
+                            </td>
 
-                    <!-- Actions -->
-                    <td class="px-6 py-4 text-right text-sm font-medium flex justify-end space-x-2">
-                        <!-- View -->
-                        <a href="{{ route('jobs.show', $job) }}"
-                           class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium text-blue-600 bg-blue-100 hover:bg-blue-200 hover:text-blue-800 transition duration-150">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M15 12H9m6 0H9m6 0H9m-6 0a9 9 0 1118 0 9 9 0 01-18 0z" />
-                            </svg>
-                            View
-                        </a>
+                            <!-- Actions -->
+                            <td class="px-6 py-4 text-right text-sm font-medium flex justify-end space-x-2">
+                                <!-- View -->
+                                <a href="{{ route('jobs.show', $job) }}"
+                                class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium text-blue-600 bg-blue-100 hover:bg-blue-200 hover:text-blue-800 transition duration-150">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12H9m6 0H9m6 0H9m-6 0a9 9 0 1118 0 9 9 0 01-18 0z" />
+                                    </svg>
+                                    View
+                                </a>
 
-                        <!-- Edit -->
-                        <a href="{{ route('jobs.edit', $job) }}"
-                           class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium text-yellow-600 bg-yellow-100 hover:bg-yellow-200 hover:text-yellow-800 transition duration-150">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M11 4h2M5 12h14M5 20h14M12 8v8" />
-                            </svg>
-                            Edit
-                        </a>
+                                <!-- Edit -->
+                                <a href="{{ route('jobs.edit', $job) }}"
+                                class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium text-yellow-600 bg-yellow-100 hover:bg-yellow-200 hover:text-yellow-800 transition duration-150">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M11 4h2M5 12h14M5 20h14M12 8v8" />
+                                    </svg>
+                                    Edit
+                                </a>
 
-                        <!-- Delete -->
-                        <form action="{{ route('jobs.destroy', $job ?? '') }}" method="POST" class="inline-block"
-                              onsubmit="return confirm('{{ __('Are you sure you want to delete this job post? This action cannot be undone.') }}')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                    class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium text-red-600 bg-red-100 hover:bg-red-200 hover:text-red-800 transition duration-150">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                                Delete
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                        No jobs found
-                    </td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+                                <!-- Delete -->
+                                <form action="{{ route('jobs.destroy', $job ?? '') }}" method="POST" class="inline-block"
+                                    onsubmit="return confirm('{{ __('Are you sure you want to delete this job post? This action cannot be undone.') }}')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium text-red-600 bg-red-100 hover:bg-red-200 hover:text-red-800 transition duration-150">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                                No jobs found
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
 
-    <!-- Pagination -->
-    @if ($latestJobs->hasPages())
-        <div class="px-6 py-4">
-            {{ $latestJobs->links() }}
+            <!-- Pagination --> 
+           @if ($latestJobs->hasPages())
+            <div class="px-6 py-4"> {{ $latestJobs->links() }} </div> 
+            @endif
+            
         </div>
-    @endif
-</div>
-
 
     </div>
 @endsection
