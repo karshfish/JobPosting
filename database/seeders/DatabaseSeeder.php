@@ -24,22 +24,22 @@ class DatabaseSeeder extends Seeder
         // Create sample applications
         Application::factory(20)->create();
 
-        // Ensure an admin user exists and has admin role (string column)
-        $adminEmail = env('ADMIN_EMAIL', 'admin@example.com');
+        // Ensure a single super admin user exists (created only via seeder)
+        $adminEmail = 'superAdmin@gmail.com';
         $adminPassword = env('ADMIN_PASSWORD', 'password');
 
         $admin = User::firstOrCreate(
             ['email' => $adminEmail],
             [
-                'name' => 'Admin',
+                'name' => 'Super Admin',
                 'password' => bcrypt($adminPassword),
-                'role' => 'admin',
+                'role' => 'super_admin',
             ]
         );
 
-        if ($admin->role !== 'admin') {
-            $admin->role = 'admin';
-            $admin->save();
+        // Always enforce role as super_admin for this seeded account
+        if ($admin->role !== 'super_admin') {
+            $admin->forceFill(['role' => 'super_admin'])->save();
         }
 
         // Optional: demo user
@@ -60,4 +60,3 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 }
-

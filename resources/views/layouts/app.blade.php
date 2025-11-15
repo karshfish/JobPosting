@@ -33,5 +33,45 @@
             </main>
             
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            (function () {
+                const hasStatus = @json(session('status') ? true : false);
+                const statusMessage = @json(session('status'));
+                const hasErrorMessage = @json(session('error') ? true : false);
+                const errorMessage = @json(session('error'));
+                const validationErrors = @json($errors->all());
+
+                if (hasStatus && statusMessage) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: statusMessage,
+                        confirmButtonColor: '#4f46e5'
+                    });
+                }
+
+                if (hasErrorMessage && errorMessage) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: errorMessage,
+                        confirmButtonColor: '#ef4444'
+                    });
+                }
+
+                if (validationErrors && validationErrors.length) {
+                    const html = '<ul style="text-align:left;margin:0;padding-left:1.25rem;">'
+                        + validationErrors.map(function (e) { return '<li>' + e + '</li>'; }).join('')
+                        + '</ul>';
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'There were some problems with your input:',
+                        html: html,
+                        confirmButtonColor: '#ef4444'
+                    });
+                }
+            })();
+        </script>
     </body>
 </html>

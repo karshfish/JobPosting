@@ -21,6 +21,7 @@
       @php
         $role = $user->role ?? 'none';
         $roleClasses = match($role) {
+          'super_admin' => 'border-purple-300 text-purple-700 bg-purple-50 dark:border-purple-600 dark:text-purple-200 dark:bg-purple-800/40',
           'admin' => 'border-red-300 text-red-700 bg-red-50 dark:border-red-600 dark:text-red-200 dark:bg-red-800/40',
           'employer' => 'border-amber-300 text-amber-700 bg-amber-50 dark:border-amber-600 dark:text-amber-200 dark:bg-amber-800/40',
           'candidate' => 'border-emerald-300 text-emerald-700 bg-emerald-50 dark:border-emerald-600 dark:text-emerald-200 dark:bg-emerald-800/40',
@@ -37,18 +38,20 @@
 
         <div class="mt-3 flex items-center gap-2 text-xs">
           <span class="inline-flex items-center px-2 py-0.5 rounded border {{ $roleClasses }}">
-            {{ ucfirst($role) }}
+            {{ $role === 'super_admin' ? 'Super Admin' : ucfirst($role) }}
           </span>
           <span class="text-slate-300 dark:text-slate-500">•</span>
           <span class="text-slate-500 dark:text-slate-300">Joined {{ optional($user->created_at)->format('M d, Y') }}</span>
         </div>
 
         <div class="mt-4 flex items-center justify-end gap-2">
-          <a href="{{ route('admin.users.edit', $user) }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700/40 transition-base text-sm">
-            Edit
-          </a>
-          @if(auth()->id() !== $user->id && ($user->role !== 'admin') && !($user->is_admin ?? false))
-            <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Delete this user? This action cannot be undone.');">
+          @if(auth()->user()->role === 'super_admin')
+            <a href="{{ route('admin.users.edit', $user) }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700/40 transition-base text-sm">
+              Edit
+            </a>
+          @endif
+          @if(auth()->user()->role === 'super_admin' && auth()->id() !== $user->id && $user->role !== 'super_admin')
+            <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="js-user-delete-form">
               @csrf
               @method('DELETE')
               <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-red-300 text-red-700 hover:bg-red-50 dark:hover:bg-red-800/40 transition-base text-sm">
@@ -63,5 +66,5 @@
     @endforelse
   </div>
 
-  <div class="mt-4">{{ $users->links() }}</div>
+  <div class="mt-4">{{ $users->links('pagination::simple-tailwind') }}</div>
 @endsection
