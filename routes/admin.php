@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\ApplicationManagementController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserManagementController;
 
-Route::middleware(['auth','role:admin'])
+Route::middleware(['auth','role:admin,super_admin'])
     ->prefix('admin')->name('admin.')
     ->group(function () {
         Route::get('/', DashboardController::class)->name('dashboard');

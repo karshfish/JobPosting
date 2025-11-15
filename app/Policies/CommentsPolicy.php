@@ -45,7 +45,7 @@ class CommentsPolicy
      */
     public function delete(User $user, Comment $comment): bool
     {
-        return $user->role === 'admin';
+        return in_array($user->role, ['admin', 'super_admin'], true);
     }
 
     /**
@@ -53,7 +53,7 @@ class CommentsPolicy
      */
     public function restore(User $user, Comment $comment): bool
     {
-        return $user->role === 'admin';
+        return in_array($user->role, ['admin', 'super_admin'], true);
     }
 
     /**
@@ -61,6 +61,6 @@ class CommentsPolicy
      */
     public function forceDelete(User $user, Comment $comment): bool
     {
-        return $user->role === 'admin';
+        return in_array($user->role, ['admin', 'super_admin'], true);
     }
 }

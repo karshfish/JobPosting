@@ -179,9 +179,11 @@
                        text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50
                        hover:text-blue-700 dark:hover:text-blue-300">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-5 md:h-5" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 2v10M5.64 5.64a9 9 0 0112.72 0M4 12a8 8 0 0016 0" />
+                                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6A2.25 2.25 0 0015.75 18.75V15" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M18 12H9.75M15.75 9L18 12l-2.25 3" />
                         </svg>
                         <span class="sidebar-label">Logout</span>
                     </button>
@@ -192,41 +194,53 @@
 
 
 
-            <div class="sidebar-footer px-4 py-2 border-t border-slate-200 dark:border-slate-800">
+            <div class="sidebar-footer px-4 py-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40">
                 @if (auth()->check())
-                    <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Your name : <span
-                            class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->name ?: 'none' }}</span>
-                   </div>
-                    <div class="text-xs text-slate-500 my-2 dark:text-slate-400 mb-1">Your email : <span
-                            class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->email ?: 'none' }}</span>
-                   </div>
-                    <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Your role : <span
-                            class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->role ?: 'none' }}</span>
-                   </div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="h-9 w-9 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-300 text-sm font-semibold">
+                            {{ strtoupper(mb_substr(auth()->user()->name ?: 'E', 0, 1)) }}
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-[11px] uppercase tracking-wide text-slate-400 dark:text-slate-500">Signed in as</p>
+                            <p class="text-sm font-medium text-slate-800 dark:text-slate-100 truncate">
+                                {{ auth()->user()->name ?: 'Employer' }}
+                            </p>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                                {{ auth()->user()->email ?: 'No email set' }}
+                            </p>
+                        </div>
+                    </div>
 
-                    <div class="py-3 flex items-center justify-center gap-3" x-data="{ profileOpen: false, darkMode: localStorage.theme === 'dark' }" x-init="if (darkMode) document.documentElement.classList.add('dark');
-                    else document.documentElement.classList.remove('dark');">
+                    <div class="flex items-center justify-between gap-2">
+                        <span
+                            class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded-full border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+                            Role: {{ auth()->user()->role ?: 'none' }}
+                        </span>
 
-                        <!-- 🌗 Theme Toggle -->
-                        <button
-                            @click="
-            darkMode = !darkMode;
-            localStorage.theme = darkMode ? 'dark' : 'light';
-            document.documentElement.classList.toggle('dark', darkMode);
-        "
-                            class="inline-flex w-[90%] justify-center items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-700
-               text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50
-               text-sm font-medium transition-all duration-200">
-                            <template x-if="darkMode">
-                                <span>☀️ Light</span>
-                            </template>
-                            <template x-if="!darkMode">
-                                <span>🌙 Dark</span>
-                            </template>
-                        </button>
+                        <div class="flex items-center" x-data="{ darkMode: localStorage.theme === 'dark' }"
+                            x-init="if (darkMode) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');">
+                            <button
+                                @click="
+                                    darkMode = !darkMode;
+                                    localStorage.theme = darkMode ? 'dark' : 'light';
+                                    document.documentElement.classList.toggle('dark', darkMode);
+                                "
+                                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-700
+                       text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50
+                       text-[11px] font-medium transition-all duration-200">
+                                <template x-if="darkMode">
+                                    <span>Light mode</span>
+                                </template>
+                                <template x-if="!darkMode">
+                                    <span>Dark mode</span>
+                                </template>
+                            </button>
+                        </div>
                     </div>
                 @endif
-                <div class="mt-3 text-[11px] text-slate-500 dark:text-slate-400">&copy; {{ date('Y') }} JobPosting
+                <div class="mt-3 text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                    <span>&copy; 2025 HireHup</span>
+                    <span class="text-[10px] uppercase tracking-wide text-slate-400 dark:text-slate-500">Employer Panel</span>
                 </div>
             </div>
         </aside>
@@ -318,25 +332,6 @@
             </header>
 
             <main class="p-4 md:p-6 max-w-7xl mx-auto w-full animate-fade-in">
-                @if (session('status'))
-                    <div
-                        class="mb-4 rounded-md border border-green-200 dark:border-green-900 bg-green-50 dark:bg-emerald-900/30 text-green-800 dark:text-emerald-200 px-4 py-3">
-                        {{ session('status') }}
-                    </div>
-                @endif
-
-                @if ($errors->any())
-                    <div
-                        class="mb-4 rounded-md border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200 px-4 py-3">
-                        <div class="font-semibold mb-1">There were some problems with your input:</div>
-                        <ul class="list-disc list-inside text-sm">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
                 <div
                     class="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 shadow-sm rounded-lg p-4 md:p-6 transition-all duration-200 hover:shadow-md">
                     @yield('content')
@@ -366,6 +361,46 @@
                 localStorage.setItem('theme', mode);
                 apply(mode);
             });
+        })();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        (function() {
+            const hasStatus = @json(session('status') ? true : false);
+            const statusMessage = @json(session('status'));
+            const hasErrorMessage = @json(session('error') ? true : false);
+            const errorMessage = @json(session('error'));
+            const validationErrors = @json($errors->all());
+
+            if (hasStatus && statusMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: statusMessage,
+                    confirmButtonColor: '#4f46e5'
+                });
+            }
+
+            if (hasErrorMessage && errorMessage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: errorMessage,
+                    confirmButtonColor: '#ef4444'
+                });
+            }
+
+            if (validationErrors && validationErrors.length) {
+                const html = '<ul style="text-align:left;margin:0;padding-left:1.25rem;">'
+                    + validationErrors.map(function(e) { return '<li>' + e + '</li>'; }).join('')
+                    + '</ul>';
+                Swal.fire({
+                    icon: 'error',
+                    title: 'There were some problems with your input:',
+                    html: html,
+                    confirmButtonColor: '#ef4444'
+                });
+            }
         })();
     </script>
     <script>
