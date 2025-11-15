@@ -293,21 +293,54 @@
                             class="absolute right-0 mt-2 w-52 origin-top-right rounded-xl
                    bg-white dark:bg-slate-900 shadow-lg ring-1 ring-black/10 z-50">
                             <div class="py-2">
-                                <a href="{{ route('profile.edit') }}"
-                                    class="flex items-center gap-2 px-4 py-2 text-sm
-                           text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition">
-                                    👤 <span>Profile</span>
-                                </a>
 
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit"
-                                        class="flex w-full items-center gap-2 px-4 py-2 text-sm
-                               text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition">
-                                        🚪 <span>Logout</span>
-                                    </button>
-                                </form>
-                            </div>
+    {{-- Home (visible only for logged users) --}}
+    @auth
+        <a href="{{ route('jobs.index') }}"
+            class="flex items-center gap-2 px-4 py-2 text-sm
+                   text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition">
+            🏠 <span>Home</span>
+        </a>
+
+        {{-- Dashboard based on user role --}}
+        @php
+            $dashboardRoute = match (auth()->user()->role) {
+                'candidate' => 'candidate.dashboard',
+                'employer'  => 'employer.dashboard',
+                'admin'     => 'admin.dashboard',
+                default     => null,
+            };
+        @endphp
+
+        @if($dashboardRoute)
+            <a href="{{ route($dashboardRoute) }}"
+                class="flex items-center gap-2 px-4 py-2 text-sm
+                       text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition">
+                📊 <span>Dashboard</span>
+            </a>
+        @endif
+    @endauth
+
+
+    {{-- Profile --}}
+    <a href="{{ route('profile.edit') }}"
+        class="flex items-center gap-2 px-4 py-2 text-sm
+               text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition">
+        👤 <span>Profile</span>
+    </a>
+
+    {{-- Logout --}}
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit"
+            class="flex w-full items-center gap-2 px-4 py-2 text-sm
+                   text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition">
+            🚪 <span>Logout</span>
+        </button>
+    </form>
+
+</div>
+
                         </div>
                     </div>
 

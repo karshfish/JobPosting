@@ -24,67 +24,113 @@
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 <!-- Left: Overview & Filters -->
                 <aside class="lg:col-span-1 space-y-6">
-                    <!-- Stats Card -->
-                    <div class="bg-white overflow-hidden shadow-sm rounded-lg divide-y divide-gray-200">
-                        <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-900">{{ __('Overview') }}</h3>
-                            <dl class="mt-5 grid grid-cols-1 gap-5">
-                                <div class="flex items-center justify-between">
-                                    <dt class="text-sm font-medium text-gray-500">{{ __('Total Posts') }}</dt>
-                                    <dd class="text-lg font-semibold text-gray-900">{{ $collection->count() }}</dd>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <dt class="text-sm font-medium text-gray-500">{{ __('Published') }}</dt>
-                                    <dd class="text-lg font-semibold text-green-600">{{ $publishedCount }}</dd>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <dt class="text-sm font-medium text-gray-500">{{ __('draft') }}</dt>
-                                    <dd class="text-lg font-semibold text-yellow-600">{{ $draftCount }}</dd>
-                                </div>
-                            </dl>
-                        </div>
-                    </div>
-
-                    <!-- Quick Filters -->
-                    <div class="bg-white overflow-hidden shadow-sm rounded-lg p-6">
-    <h3 class="text-lg font-medium text-gray-900 mb-4">{{ __('Quick Filters') }}</h3>
-
-    <div class="space-y-3">
-        {{-- All --}}
-        <a href="{{ route('jobs.index') }}"
-           class="w-full block px-4 py-2 rounded-lg flex items-center justify-between
-                  text-left hover:bg-gray-50 transition {{ request('status') == '' ? 'bg-indigo-50 border border-indigo-100' : '' }}">
-            <span class="text-sm font-medium text-gray-700">All Posts</span>
-            <span class="text-sm font-semibold text-gray-900">{{ $collection->count() }}</span>
-        </a>
-
-        {{-- Published --}}
-        <a href="{{ route('jobs.index', ['status' => 'published']) }}"
-           class="w-full block px-4 py-2 rounded-lg flex items-center justify-between
-                  text-left hover:bg-gray-50 transition {{ request('status') == 'published' ? 'bg-green-50 border border-green-100' : '' }}">
-            <span class="text-sm font-medium text-gray-700">Published</span>
-            <span class="text-sm font-semibold text-green-600">{{ $publishedCount }}</span>
-        </a>
-
-        {{-- Draft --}}
-        <a href="{{ route('jobs.index', ['status' => 'draft']) }}"
-           class="w-full block px-4 py-2 rounded-lg flex items-center justify-between
-                  text-left hover:bg-gray-50 transition {{ request('status') == 'draft' ? 'bg-yellow-50 border border-yellow-100' : '' }}">
-            <span class="text-sm font-medium text-gray-700">Draft</span>
-            <span class="text-sm font-semibold text-yellow-600">{{ $draftCount }}</span>
-        </a>
-
-        {{-- Closed --}}
-        <a href="{{ route('jobs.index', ['status' => 'closed']) }}"
-           class="w-full block px-4 py-2 rounded-lg flex items-center justify-between
-                  text-left hover:bg-gray-50 transition {{ request('status') == 'closed' ? 'bg-gray-50 border border-gray-200' : '' }}">
-            <span class="text-sm font-medium text-gray-700">Closed</span>
-            <span class="text-sm font-semibold text-gray-600">{{ $closedCount }}</span>
-        </a>
+    <!-- Stats Card -->
+    <div class="bg-white overflow-hidden shadow-sm rounded-lg divide-y divide-gray-200">
+        <div class="p-6">
+            <h3 class="text-lg font-medium text-gray-900">{{ __('Overview') }}</h3>
+            <dl class="mt-5 grid grid-cols-1 gap-5">
+                <div class="flex items-center justify-between">
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Total Posts') }}</dt>
+                    <dd class="text-lg font-semibold text-gray-900">{{ $collection->count() }}</dd>
+                </div>
+                <div class="flex items-center justify-between">
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Published') }}</dt>
+                    <dd class="text-lg font-semibold text-green-600">{{ $publishedCount }}</dd>
+                </div>
+                <div class="flex items-center justify-between">
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Draft') }}</dt>
+                    <dd class="text-lg font-semibold text-yellow-600">{{ $draftCount }}</dd>
+                </div>
+                <div class="flex items-center justify-between">
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Closed') }}</dt>
+                    <dd class="text-lg font-semibold text-gray-600">{{ $closedCount }}</dd>
+                </div>
+            </dl>
+        </div>
     </div>
-</div>
 
-                </aside>
+    <!-- Quick Filters -->
+    <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+        
+        <form action="{{ route('jobs.index') }}" class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">{{ __('Quick Filters') }}</h3>
+
+    {{-- Keywords --}}
+    <div class="flex flex-col">
+        <label for="keywords" class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Keywords</label>
+        <input type="text" id="keywords" name="keywords" value="{{ request('keywords') }}"
+               placeholder="Job title or description"
+               class="w-full border-gray-300 dark:border-slate-600 rounded-md px-3 py-2 text-sm
+                      dark:bg-slate-700 dark:text-gray-200 focus:ring-indigo-500 focus:border-indigo-500 transition"/>
+    </div>
+
+    {{-- Location --}}
+    <div class="flex flex-col">
+        <label for="location" class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Location</label>
+        <input type="text" id="location" name="location" value="{{ request('location') }}"
+               placeholder="City, state..."
+               class="w-full border-gray-300 dark:border-slate-600 rounded-md px-3 py-2 text-sm
+                      dark:bg-slate-700 dark:text-gray-200 focus:ring-indigo-500 focus:border-indigo-500 transition"/>
+    </div>
+
+    {{-- Category --}}
+    <div class="flex flex-col">
+        <label for="category" class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+        <select id="category" name="category"
+                class="w-full border-gray-300 dark:border-slate-600 rounded-md px-3 py-2 text-sm
+                       dark:bg-slate-700 dark:text-gray-200 focus:ring-indigo-500 focus:border-indigo-500 transition">
+            <option value="">-- All --</option>
+            @foreach($categories ?? [] as $category)
+                <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                    {{ $category->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    {{-- Desired Salary --}}
+    <div class="flex flex-col">
+        <label for="salary" class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Desired Salary</label>
+        <input type="number" id="salary" name="salary" value="{{ request('salary') }}" min="0"
+               placeholder="Enter your expected salary"
+               class="w-full border-gray-300 dark:border-slate-600 rounded-md px-3 py-2 text-sm
+                      dark:bg-slate-700 dark:text-gray-200 focus:ring-indigo-500 focus:border-indigo-500 transition"/>
+    </div>
+
+    {{-- Date Posted --}}
+    <div class="flex flex-col">
+        <label for="date_posted" class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date Posted</label>
+        <select id="date_posted" name="date_posted"
+                class="w-full border-gray-300 dark:border-slate-600 rounded-md px-3 py-2 text-sm
+                       dark:bg-slate-700 dark:text-gray-200 focus:ring-indigo-500 focus:border-indigo-500 transition">
+            <option value="">-- Any --</option>
+            <option value="today" {{ request('date_posted') == 'today' ? 'selected' : '' }}>Today</option>
+            <option value="week" {{ request('date_posted') == 'week' ? 'selected' : '' }}>This Week</option>
+            <option value="month" {{ request('date_posted') == 'month' ? 'selected' : '' }}>This Month</option>
+        </select>
+    </div>
+
+    {{-- Buttons --}}
+    <div class="flex flex-col md:col-span-2 lg:col-span-3 items-start md:items-end gap-2 mt-2">
+        <div class="flex gap-3">
+            {{-- Reset --}}
+            <button  type="reset"
+                    class="px-5 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition">
+                Reset
+            </button>
+            {{-- Submit --}}
+            <button type="submit"
+                    class="px-5 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">
+                Filter
+            </button>
+        </div>
+    </div>
+
+</form>
+
+    </div>
+</aside>
+
 
                 <!-- Right: Job Posts List -->
                 <section class="lg:col-span-3 space-y-6">

@@ -64,124 +64,9 @@
                     </div>
                 </div>
             @else
-                <div class="bg-white rounded-xl mb-5 shadow-lg border border-gray-200 overflow-hidden p-6 relative">
-                    <!-- Top Row: Logo + Company + Actions -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <!-- Company Logo -->
-                            <div
-                                class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-300">
-                                @if (!empty($post->branding_image))
-                                    <img src="{{ asset('storage/' . $post->branding_image) }}" alt="{{ $post->title }}"
-                                        class="w-full h-full object-cover">
-                                @else
-                                    <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                                    </svg>
-                                @endif
-                            </div>
+               <div class="md:grid grid-cols-12 gap-4">
 
-                            <!-- Company Info -->
-                            <div class="flex flex-col">
-                                <span
-                                    class="text-lg font-semibold text-gray-900">{{ $post->company_name ?? $post->title }}</span>
-                                <span class="text-sm text-gray-500">{{ $post->category->name  }}</span>
-                                <span
-                                    class="text-sm text-gray-400">{{ $post->location ?? __('Location not specified') }}
-                                    · {{ $post->created_at->diffForHumans() }}</span>
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="flex items-center space-x-3">
-                            @php $s = $post->status ?? 'draft'; @endphp
-                            <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $s === 'published'
-                                    ? 'bg-green-100 text-green-800'
-                                    : ($s === 'draft'
-                                        ? 'bg-yellow-100 text-yellow-800'
-                                        : ($s === 'closed'
-                                            ? 'bg-gray-100 text-gray-800'
-                                            : 'bg-yellow-500 text-yellow-800')) }}">
-                                <span
-                                    class="w-2 h-2 mr-2 rounded-full {{ $s === 'published'
-                                        ? 'bg-green-500'
-                                        : ($s === 'draft'
-                                            ? 'bg-yellow-500'
-                                            : ($s === 'closed'
-                                                ? 'bg-gray-500'
-                                                : 'bg-yellow-500')) }}"></span>
-                                {{ ucfirst($s) }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Job Details Row -->
-                    <div class="mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <!-- Left Info: Work Type, Job Type, Salary -->
-                        <div class="flex md:justify-evenly flex-col md:flex-row md:items-center gap-4 md:w-[75%]">
-                            <!-- Work Type -->
-                            <div class="flex  items-center space-x-2 text-gray-600">
-                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                                <span>{{ ucfirst($post->work_type ?? 'Not specified') }}</span>
-                            </div>
-
-                            <!-- Job Type -->
-                            <div class="flex items-center space-x-2 text-gray-600">
-                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v12a2 2 0 01-2 2z" />
-                                </svg>
-                                <span>{{ ucfirst($post->job_type ?? 'Full-time') }}</span>
-                            </div>
-
-                            <!-- Salary -->
-                            @if ($post->salary_min || $post->salary_max)
-                                <div class="flex items-center space-x-2 text-gray-600">
-                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>
-                                        {{ $post->salary_min ? '$' . number_format($post->salary_min) : 'N/A' }} -
-                                        {{ $post->salary_max ? '$' . number_format($post->salary_max) : 'N/A' }}
-                                    </span>
-                                </div>
-                            @endif
-                        </div>
-
-                        <!-- Right: Apply Button -->
-                        <div class="flex justify-start md:justify-end">
-                            @php
-                                $user = auth()->user();
-                                $applied =
-                                    $user && $user->candidate
-                                        ? $user->candidate->applications()->where('job_id', $post->id)->exists()
-                                        : false;
-                            @endphp
-
-                            <a href="{{ $applied ? '#' : route('candidate.jobs.apply', $post) }}"
-                                class="px-6 py-2 font-semibold rounded-lg transition
-   {{ $applied ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700' }}">
-                                {{ $applied ? 'Already Applied' : 'Apply' }}
-                            </a>
-                        </div>
-                    </div>
-
-
-                    <!-- Optional Notes -->
-                    <div class="mt-4 text-sm text-gray-500">
-                        {{ $post->remote ? 'Remote · Matches your job preferences' : '' }}
-                    </div>
-                </div>
+    <div class="col-span-8 bg-white p-4 rounded-lg shadow">
 
                 <!-- Job Description -->
 
@@ -527,6 +412,137 @@
 
                     </div>
                 </div>
+        </div>
+        <div class="bg-white h-96 relative md:col-span-4 rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-lg transition-all duration-200">
+            <!-- Status Badge -->
+        @php $s = $post->status ?? 'draft'; @endphp
+        
+        <span class="px-3 absolute top-3 right-3 py-1 rounded-full text-xs font-medium flex items-center gap-2
+            {{ $s === 'published' ? 'bg-green-100 text-green-700' :
+               ($s === 'draft' ? 'bg-yellow-100 text-yellow-700' :
+               ($s === 'closed' ? 'bg-gray-200 text-gray-700' :
+               'bg-red-100 text-red-700')) }}">
+           
+            <span class="w-2 h-2 rounded-full
+                {{ $s === 'published' ? 'bg-green-500' :
+                   ($s === 'draft' ? 'bg-yellow-500' :
+                   ($s === 'closed' ? 'bg-gray-500' :
+                   'bg-red-500')) }}">
+            </span>
+
+            {{ ucfirst($s) }}
+        </span>
+            <!-- Company Logo -->
+            <div class="w-24 h-24 mx-auto mb-5 rounded-full overflow-hidden bg-gray-100 border flex items-center justify-center">
+                @if (!empty($post->branding_image))
+                    <img src="{{ asset('storage/' . $post->branding_image) }}" 
+                         alt="{{ $post->title }}" 
+                         class="w-full h-full object-cover">
+                @else
+                    <svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                @endif
+            </div>
+    <!-- Header: Logo + Info + Status -->
+    <div class="flex items-center justify-center">
+
+        <!-- Logo + Company Info -->
+        <div class="flex items-center justify-center text-center gap-4">
+
+
+            <!-- Company Info -->
+            <div class="text-center">
+                <div class="text-base font-semibold text-gray-900 leading-tight">
+                    {{ $post->company_name ?? $post->title }}
+                </div>
+                <div class="text-sm text-gray-500">
+                    {{ $post->category->name }}
+                </div>
+                <div class="text-xs text-gray-400">
+                    {{ $post->location ?? 'Location not specified' }} · {{ $post->created_at->diffForHumans() }}
+                </div>
+            </div>
+        </div>
+
+        
+
+    </div>
+
+    <!-- Job Details -->
+    <div class="mt-5 space-y-3 text-center">
+
+        <!-- Work type -->
+        <div class="flex items-center gap-2 text-gray-600 text-sm">
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <span>{{ ucfirst($post->work_type ?? 'Not specified') }}</span>
+        </div>
+
+        <!-- Job Type -->
+        <div class="flex items-center gap-2 text-gray-600 text-sm">
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v12a2 2 0 01-2 2z"/>
+            </svg>
+            <span>{{ ucfirst($post->job_type ?? 'Full-time') }}</span>
+        </div>
+
+        <!-- Salary -->
+        @if ($post->salary_min || $post->salary_max)
+            <div class="flex items-center gap-2 text-gray-600 text-sm">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>
+                    {{ $post->salary_min ? '$'.number_format($post->salary_min) : 'N/A' }} –
+                    {{ $post->salary_max ? '$'.number_format($post->salary_max) : 'N/A' }}
+                </span>
+            </div>
+        @endif
+
+    </div>
+
+    <!-- Apply Button -->
+    <div class="mt-6">
+        @php
+            $user = auth()->user();
+            $applied = $user?->candidate?->applications()->where('job_id', $post->id)->exists() ?? false;
+            $notPublished = $post->status !== 'published';
+        @endphp
+
+        <a href="{{ $applied || $notPublished ? '#' : route('candidate.jobs.apply', $post) }}"
+            class="block w-full text-center px-4 py-2 font-semibold rounded-lg transition
+                @if ($notPublished)
+                    bg-gray-300 text-gray-600 cursor-not-allowed
+                @elseif($applied)
+                    bg-gray-400 text-white cursor-not-allowed
+                @else
+                    bg-blue-600 text-white hover:bg-blue-700
+                @endif"
+            @if ($applied || $notPublished) onclick="return false;" @endif>
+            
+            @if ($notPublished)
+                Not Available
+            @elseif($applied)
+                Already Applied
+            @else
+                Apply
+            @endif
+
+        </a>
+    </div>
+
+    <!-- Notes -->
+    <div class="mt-3 text-xs text-gray-500">
+        {{ $post->remote ? 'Remote · Matches your preferences' : '' }}
+    </div>
+</div>
+
         </div>
         @endif
         </div>
