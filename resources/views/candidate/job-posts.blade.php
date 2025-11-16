@@ -50,7 +50,7 @@
 
                     <!-- Quick Filters -->
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
-                        <form action="{{ route('jobs.index') }}" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <form action="{{ route('candidate.jobs') }}" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">{{ __('Quick Filters') }}</h3>
 
                             {{-- Keywords --}}
@@ -136,15 +136,15 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                             </svg>
                             <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">{{ __('No job posts') }}</h3>
-                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('Get started by creating a new job post.') }}</p>
-                            <div class="mt-6">
+                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('Wait for new job postings.') }}</p>
+                            <!-- <div class="mt-6">
                                 <a href="{{ route('jobs.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                     </svg>
                                     {{ __('Create Job Post') }}
                                 </a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     @else

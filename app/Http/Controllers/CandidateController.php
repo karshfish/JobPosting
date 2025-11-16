@@ -62,6 +62,12 @@ class CandidateController extends Controller
     // ------------------------------
     public function showJob(JobPost $job)
     {
+        $job->load([
+            'comments' => fn($q) => $q->whereNull('parent_id')->latest(),
+            'comments.user',
+            'comments.replies.user',
+        ]);
+
         return view('candidate.show-job-posts', compact('job'));
     }
 
@@ -72,63 +78,62 @@ class CandidateController extends Controller
     {
         $query = JobPost::query();
 
-        // Search by title
-        if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+        // Keywords
+        if ($request->filled('keywords')) {
+            $query->where('title', 'like', '%' . $request->keywords . '%')
+                ->orWhere('description', 'like', '%' . $request->keywords . '%');
         }
 
-        // Filter by status
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        // Filter by location
+        // Location
         if ($request->filled('location')) {
             $query->where('location', 'like', '%' . $request->location . '%');
         }
 
-        // Filter by work type
-        if ($request->filled('work_type')) {
-            $query->where('work_type', $request->work_type);
+        // Category
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
         }
 
-        // Filter by date posted
-        if ($request->filled('date')) {
-            switch ($request->date) {
-                case 'today':
-                    $query->whereDate('created_at', now());
-                    break;
-                case 'week':
-                    $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
-                    break;
-                case 'month':
-                    $query->whereMonth('created_at', now()->month);
-                    break;
+        // Salary Range
+        if ($request->filled('salary')) {
+            $salary = $request->salary;
+
+            $query->where(function ($q) use ($salary) {
+                $q->where('salary_min', '<=', $salary)
+                    ->where('salary_max', '>=', $salary);
+            });
+        }
+
+        // Date Posted
+        if ($request->filled('date_posted')) {
+            if ($request->date_posted == 'today') {
+                $query->whereDate('created_at', now());
+            } elseif ($request->date_posted == 'week') {
+                $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+            } elseif ($request->date_posted == 'month') {
+                $query->whereMonth('created_at', now()->month);
             }
         }
 
-        // Clone for stats
-        $statsQuery = clone $query;
+        // Pagination
+        $jobPosts = $query->paginate(10);
 
-        // Paginate jobs
-        $jobs = $query->latest()->paginate(5)->withQueryString();
+        // Categories list
+        $categories = \App\Models\Category::all();
 
         // Stats
-        $totalJobs     = $statsQuery->count();
-        $publishedJobs = $statsQuery->where('status', 'published')->count();
-        $draftJobs     = $statsQuery->where('status', 'draft')->count();
-        $closedJobs    = $statsQuery->where('status', 'closed')->count();
-
-        // Latest 5 jobs
-        $latestJobs = $statsQuery->latest()->take(5)->get();
+        $allCount       = JobPost::count();
+        $publishedCount = JobPost::where('status', 'published')->count();
+        $draftCount     = JobPost::where('status', 'draft')->count();
+        $closedCount    = JobPost::where('status', 'closed')->count();
 
         return view('candidate.job-posts', compact(
-            'jobs',
-            'totalJobs',
-            'publishedJobs',
-            'draftJobs',
-            'closedJobs',
-            'latestJobs'
+            'jobPosts',
+            'categories',
+            'allCount',
+            'publishedCount',
+            'draftCount',
+            'closedCount'
         ));
     }
 
@@ -151,11 +156,13 @@ class CandidateController extends Controller
             ->exists();
 
         if ($alreadyApplied) {
-            return back()->with('error', 'You have already applied for this job.');
+            return redirect()->route('candidate.show-job', $job->id)
+                ->with('error', 'You have already submitted an application for this job.');
         }
 
         return view('candidate.apply', compact('job', 'user'));
     }
+
 
     public function submitApplication(Request $request, JobPost $job)
     {
@@ -172,8 +179,10 @@ class CandidateController extends Controller
             ->exists();
 
         if ($alreadyApplied) {
-            return back()->with('error', 'You already applied to this job.');
+            return redirect()->route('candidate.show-job', $job->id)
+                ->with('error', 'You have already applied to this job.');
         }
+
 
         // Validation
         $request->validate([

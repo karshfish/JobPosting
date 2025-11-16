@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\Employer\JobPostController;
+use App\Http\Controllers\Candidate\JobController as CandidateJobController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/candidate/dashboard', [CandidateController::class, 'dashboard'])->name('candidate.dashboard');
@@ -10,11 +11,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/candidate/profile', [CandidateController::class, 'updateProfile'])->name('candidate.updateProfile');
 
 
-    Route::get('/candidate/jobs', [JobPostController::class, 'index'])
-        ->name('candidate.jobs-posts');
+    Route::get('/candidate/jobs', [CandidateController::class, 'jobPosts'])
+        ->name('candidate.jobs');
 
-    Route::get('/candidate/jobs/{job}', [JobPostController::class, 'show'])
-        ->name('candidate.jobs.show');
+    
+
+    Route::get('/candidate/job/{job}', [CandidateController::class, 'showJob'])
+        ->name('candidate.show-job');
+
     Route::get('/candidate/jobs/{job}/apply', [CandidateController::class, 'showApplyForm'])->name('candidate.jobs.apply');
     Route::post('/candidate/jobs/{job}/apply', [CandidateController::class, 'submitApplication'])->name('candidate.jobs.submit');
     Route::get('/candidate/jobs/{job}', [CandidateController::class, 'showJob'])->name('candidate.jobs.show');

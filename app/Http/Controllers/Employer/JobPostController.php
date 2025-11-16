@@ -136,8 +136,8 @@ class JobPostController extends Controller
         'comments.user',
         'comments.replies.user',
     ]);
-    
-    return view('employer.jobs.show', compact('job'));
+
+    return view('candidate.show-job-posts', compact('job'));
 }
 
     /**

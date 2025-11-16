@@ -1,5 +1,10 @@
 <!doctype html>
-<html lang="en" x-data="{ darkMode: $persist(false) }" x-init="$watch('darkMode', value => document.documentElement.classList.toggle('dark', value))">
+<html lang="en" x-data="{
+    darkMode: localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)
+}" x-init="$watch('darkMode', value => {
+    localStorage.setItem('theme', value ? 'dark' : 'light');
+    document.documentElement.classList.toggle('dark', value);
+})">
 
 <head>
     <meta charset="utf-8">
@@ -10,10 +15,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-dXU+uF1Rj8rFZ/1gO3+eQ6zzNNpJ3ytH4zVZT0x5Xp+3aV+YxJcfH3xvQnE8X6xkF/TZPo3q1TLZsN1h/0ZT0Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script>
-        // Set initial theme early to avoid FOUC
+        // Set initial theme early to avoid FOUC - UPDATED VERSION
         (function() {
             try {
-                const stored = localStorage.getItem('candidate-theme');
+                const stored = localStorage.getItem('theme');
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 const isDark = stored ? stored === 'dark' : prefersDark;
                 document.documentElement.classList.toggle('dark', isDark);
@@ -116,7 +121,7 @@
                 </a>
 
                 <!-- Browse Jobs -->
-                <a href="{{ route('jobs.index') }}"
+                <a href="{{ route('candidate.jobs') }}"
                     class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md
                         {{ request()->routeIs('candidate.jobs*')
                             ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
@@ -201,8 +206,11 @@
 
                 <div class="flex items-center gap-3">
                     <!-- Theme Toggle for Header -->
-                    <button x-data="{ darkMode: localStorage.getItem('candidate-theme') === 'dark' }"
-                        @click="darkMode = !darkMode; localStorage.setItem('candidate-theme', darkMode ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', darkMode)"
+                    <!-- Theme Toggle for Header -->
+                    <button x-data="{
+    darkMode: localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)
+}"
+                        @click="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', darkMode)"
                         class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-base"
                         aria-label="Toggle theme">
                         <template x-if="darkMode">

@@ -99,7 +99,7 @@
         @else
         <div class="text-center text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 py-10 rounded-lg border dark:border-gray-600">
             <p class="text-lg">You haven't applied to any jobs yet.</p>
-            <a href="{{ route('jobs.index') }}" class="text-blue-600 dark:text-blue-400 font-medium hover:underline mt-2 inline-block">
+            <a href="{{ route('candidate.jobs') }}" class="text-blue-600 dark:text-blue-400 font-medium hover:underline mt-2 inline-block">
                 Browse Available Jobs →
             </a>
         </div>
