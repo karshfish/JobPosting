@@ -47,8 +47,7 @@
         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 min-w-0">
           <img src="{{ asset('assets/logo.jpg') }}" alt="HireHup logo" class="h-8 w-auto rounded">
           <span class="logo-text text-xl font-extrabold tracking-tight text-gray-800 dark:text-slate-100 truncate">
-            <span class="text-indigo-600">Hire</span>
-            <span class="dark:text-white">Hup</span>
+            <span class="text-indigo-600">Admin</span>
           </span>
         </a>
         <button id="sidebar-close" type="button" class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-base" aria-label="Close sidebar">
@@ -127,7 +126,7 @@
             </span>
           </div>
         @endif
-        <div class="mt-3 text-[11px] text-slate-500 dark:text-slate-400">&copy; 2025 HireHup</div>
+        <div class="mt-3 text-[11px] text-slate-500 dark:text-slate-400">&copy; 2025 Hireup</div>
       </div>
     </aside>
     <!-- Backdrop for mobile -->
@@ -151,9 +150,13 @@
             </div>
           </div>
         <div class="flex items-center gap-3">
-          <button id="theme-toggle" type="button" class="transition-base inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 text-sm">
-            <span class="theme-toggle-light hidden">Light</span>
-            <span class="theme-toggle-dark hidden">Dark</span>
+          <button id="theme-toggle" type="button" class="transition-base inline-flex items-center justify-center p-2 rounded-full border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50" aria-label="Toggle theme">
+            <svg class="theme-toggle-light hidden w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg class="theme-toggle-dark hidden w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
           </button>
           <!-- Header logout removed; using sidebar logout -->
           <div class="text-sm text-slate-500 dark:text-slate-400">@yield('page-actions')</div>

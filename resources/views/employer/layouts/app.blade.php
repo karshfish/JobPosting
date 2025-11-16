@@ -229,14 +229,23 @@
                                     localStorage.theme = darkMode ? 'dark' : 'light';
                                     document.documentElement.classList.toggle('dark', darkMode);
                                 "
-                                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-700
+                                class="inline-flex items-center justify-center p-2 rounded-full border border-slate-300 dark:border-slate-700
                        text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50
-                       text-[11px] font-medium transition-all duration-200">
+                       transition-all duration-200"
+                                aria-label="Toggle dark mode">
                                 <template x-if="darkMode">
-                                    <span>Light mode</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         stroke-width="1.5" class="w-4 h-4 text-yellow-300 drop-shadow">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M12 3.75a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V4.5A.75.75 0 0 1 12 3.75Zm0 13.5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V18A.75.75 0 0 1 12 17.25Zm8.25-5.25a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75Zm-13.5 0a.75.75 0 0 1-.75.75H4.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM17.03 7.03a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 0 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm-8.94 8.94a.75.75 0 0 1 0 1.06L7.03 18.09a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm0-7.88L7.03 7.03A.75.75 0 0 1 8.09 5.97l1.06 1.06A.75.75 0 0 1 8.09 8.09Zm8.94 8.94-1.06-1.06a.75.75 0 1 1 1.06-1.06l1.06 1.06a.75.75 0 0 1-1.06 1.06ZM12 8.25A3.75 3.75 0 1 0 15.75 12 3.75 3.75 0 0 0 12 8.25Z"/>
+                                    </svg>
                                 </template>
                                 <template x-if="!darkMode">
-                                    <span>Dark mode</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         stroke-width="1.5" class="w-4 h-4 text-slate-500">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
+                                    </svg>
                                 </template>
                             </button>
                         </div>
