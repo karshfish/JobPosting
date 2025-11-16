@@ -12,7 +12,9 @@ class CandidateController extends Controller
 {
     use AuthorizesRequests;
 
+    // ------------------------------
     // Dashboard
+    // ------------------------------
     public function dashboard()
     {
         $user = Auth::user();
@@ -24,7 +26,9 @@ class CandidateController extends Controller
         return view('candidate.dashboard', compact('user', 'applications'));
     }
 
+    // ------------------------------
     // Profile
+    // ------------------------------
     public function editProfile()
     {
         $user = Auth::user();
@@ -36,88 +40,163 @@ class CandidateController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'phone' => 'nullable|string|max:50',
-            'address' => 'nullable|string|max:255',
-            'resume' => 'nullable|mimes:pdf|max:2048',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png',
+
         ]);
 
-        if ($request->hasFile('resume')) {
-            $user->resume = $request->file('resume')->store('resumes', 'public');
+        if ($request->hasFile('profile_photo')) {
+            $user->profile_photo_path = $request->file('profile_photo')->store('profile-photos', 'public');
         }
 
-        $user->phone = $request->phone;
-        $user->address = $request->address;
-        // $user->save();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
 
         return back()->with('success', 'Profile updated.');
     }
 
-    // Jobs - صفحة Job Posts مع الإحصائيات والفلاتر
+    // ------------------------------
+    // Show Job
+    // ------------------------------
     public function showJob(JobPost $job)
     {
+        $job->load([
+            'comments' => fn($q) => $q->whereNull('parent_id')->latest(),
+            'comments.user',
+            'comments.replies.user',
+        ]);
+
         return view('candidate.show-job-posts', compact('job'));
     }
+
+    // ------------------------------
+    // Job Posts + Filters
+    // ------------------------------
     public function jobPosts(Request $request)
     {
-        // Base query
         $query = JobPost::query();
 
-        // Filters
-        if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
-        }
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-        if ($request->filled('from')) {
-            $query->whereDate('created_at', '>=', $request->from);
-        }
-        if ($request->filled('to')) {
-            $query->whereDate('created_at', '<=', $request->to);
+        // Keywords
+        if ($request->filled('keywords')) {
+            $query->where('title', 'like', '%' . $request->keywords . '%')
+                ->orWhere('description', 'like', '%' . $request->keywords . '%');
         }
 
-        // Paginated jobs for grid
-        $jobs = $query->latest()->paginate(5)->withQueryString();
+        // Location
+        if ($request->filled('location')) {
+            $query->where('location', 'like', '%' . $request->location . '%');
+        }
+
+        // Category
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // Salary Range
+        if ($request->filled('salary')) {
+            $salary = $request->salary;
+
+            $query->where(function ($q) use ($salary) {
+                $q->where('salary_min', '<=', $salary)
+                    ->where('salary_max', '>=', $salary);
+            });
+        }
+
+        // Date Posted
+        if ($request->filled('date_posted')) {
+            if ($request->date_posted == 'today') {
+                $query->whereDate('created_at', now());
+            } elseif ($request->date_posted == 'week') {
+                $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+            } elseif ($request->date_posted == 'month') {
+                $query->whereMonth('created_at', now()->month);
+            }
+        }
+
+        // Pagination
+        $jobPosts = $query->paginate(10);
+
+        // Categories list
+        $categories = \App\Models\Category::all();
 
         // Stats
-        $totalJobs = JobPost::count();
-        $publishedJobs = JobPost::where('status', 'published')->count();
-        $draftJobs = JobPost::where('status', 'draft')->count();
-        $closedJobs = JobPost::where('status', 'closed')->count();
-
-        // Latest jobs for table
-        $latestJobs = $query->latest()->paginate(5);
+        $allCount       = JobPost::count();
+        $publishedCount = JobPost::where('status', 'published')->count();
+        $draftCount     = JobPost::where('status', 'draft')->count();
+        $closedCount    = JobPost::where('status', 'closed')->count();
 
         return view('candidate.job-posts', compact(
-            'jobs',
-            'totalJobs',
-            'publishedJobs',
-            'draftJobs',
-            'closedJobs',
-            'latestJobs'
+            'jobPosts',
+            'categories',
+            'allCount',
+            'publishedCount',
+            'draftCount',
+            'closedCount'
         ));
     }
 
+
+    // ------------------------------
+    // Apply
+    // ------------------------------
     public function showApplyForm(JobPost $job)
     {
         $user = Auth::user();
+
+        // Check if job is not published
+        if ($job->status !== 'published') {
+            return back()->with('error', 'You cannot apply to this job because it is not published.');
+        }
+
+        // Check if user already applied
+        $alreadyApplied = Application::where('user_id', $user->id)
+            ->where('job_id', $job->id)
+            ->exists();
+
+        if ($alreadyApplied) {
+            return redirect()->route('candidate.show-job', $job->id)
+                ->with('error', 'You have already submitted an application for this job.');
+        }
+
         return view('candidate.apply', compact('job', 'user'));
     }
+
 
     public function submitApplication(Request $request, JobPost $job)
     {
         $user = Auth::user();
 
+        // Prevent apply if job not published
+        if ($job->status !== 'published') {
+            return back()->with('error', 'You cannot apply because this job is not published.');
+        }
+
+        // Prevent duplicate application
+        $alreadyApplied = Application::where('user_id', $user->id)
+            ->where('job_id', $job->id)
+            ->exists();
+
+        if ($alreadyApplied) {
+            return redirect()->route('candidate.show-job', $job->id)
+                ->with('error', 'You have already applied to this job.');
+        }
+
+
+        // Validation
         $request->validate([
             'phone' => 'required|string|max:50',
             'resume' => 'nullable|mimes:pdf|max:2048',
         ]);
 
         $resume = $user->resume;
+
         if ($request->hasFile('resume')) {
             $resume = $request->file('resume')->store('resumes', 'public');
         }
 
+        // Create application
         Application::create([
             'user_id' => $user->id,
             'job_id' => $job->id,
@@ -126,14 +205,16 @@ class CandidateController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('candidate.applications')->with('success', 'Application submitted.');
+        return redirect()->route('candidate.applications')
+            ->with('success', 'Application submitted successfully.');
     }
 
+
+    // LinkedIn Auto Apply (Fake / Simulation)
     public function applyViaLinkedIn(JobPost $job)
     {
         $user = Auth::user();
 
-        // Simulation for LinkedIn integration
         $linkedinPhone = $user->phone ?? '01000000000';
         $linkedinResume = $user->resume ?? null;
 
@@ -148,11 +229,17 @@ class CandidateController extends Controller
         return redirect()->route('candidate.applications')->with('success', 'Applied via LinkedIn!');
     }
 
+    // ------------------------------
     // Applications CRUD
+    // ------------------------------
     public function applications()
     {
         $user = Auth::user();
-        $applications = Application::where('user_id', $user->id)->with('job')->latest()->get();
+        $applications = Application::where('user_id', $user->id)
+            ->with('job')
+            ->latest()
+            ->get();
+
         return view('candidate.applications', compact('applications'));
     }
 
@@ -188,7 +275,6 @@ class CandidateController extends Controller
         return back()->with('success', 'Application updated.');
     }
 
-
     public function deleteApplication(Application $application)
     {
         if ($application->user_id !== Auth::id()) {
@@ -196,6 +282,7 @@ class CandidateController extends Controller
         }
 
         $application->delete();
+
         return back()->with('success', 'Application deleted.');
     }
 }

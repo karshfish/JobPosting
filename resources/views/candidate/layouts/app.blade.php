@@ -1,10 +1,5 @@
 <!doctype html>
-<html lang="en" x-data="{
-    darkMode: localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)
-}" x-init="$watch('darkMode', value => {
-    localStorage.setItem('theme', value ? 'dark' : 'light');
-    document.documentElement.classList.toggle('dark', value);
-})">
+<html lang="en" x-data="{ darkMode: $persist(false) }" x-init="$watch('darkMode', value => document.documentElement.classList.toggle('dark', value))">
 
 <head>
     <meta charset="utf-8">
@@ -15,10 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-dXU+uF1Rj8rFZ/1gO3+eQ6zzNNpJ3ytH4zVZT0x5Xp+3aV+YxJcfH3xvQnE8X6xkF/TZPo3q1TLZsN1h/0ZT0Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script>
-        // Set initial theme early to avoid FOUC - UPDATED VERSION
+        // Set initial theme early to avoid FOUC
         (function() {
             try {
-                const stored = localStorage.getItem('theme');
+                const stored = localStorage.getItem('candidate-theme');
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 const isDark = stored ? stored === 'dark' : prefersDark;
                 document.documentElement.classList.toggle('dark', isDark);
@@ -88,95 +83,7 @@
 <body class="min-h-dvh bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
     <div class="min-h-dvh flex">
         <!-- Sidebar -->
-        <aside id="sidebar"
-            class="sidebar fixed top-0 bottom-0 inset-y-0 left-0 z-40 w-64 -translate-x-full md:translate-x-0 md:static md:flex bg-white dark:bg-gray-900/50 border-r border-gray-200 dark:border-gray-800 flex-col transition-transform duration-150 ease-in-out max-h-[100vh]">
 
-            <div class="h-16 px-4 md:px-6 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
-                <a href="{{ route('candidate.dashboard') }}" class="flex items-center gap-2 min-w-0">
-                    <img src="{{ asset('assets/logo.jpg') }}" alt="Logo" class="h-8 w-auto rounded">
-                    <span class="logo-text text-lg font-bold text-gray-800 dark:text-gray-100 truncate">Candidate</span>
-                </a>
-                <button id="sidebar-close" type="button"
-                    class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-base"
-                    aria-label="Close sidebar">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
-            <nav class="flex-1 p-4 space-y-1">
-                <!-- Dashboard -->
-                <a href="{{ route('candidate.dashboard') }}"
-                    class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md
-                        {{ request()->routeIs('candidate.dashboard')
-                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50 hover:text-blue-700 dark:hover:text-blue-300' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 21V12h6v9" />
-                    </svg>
-                    <span class="sidebar-label">Dashboard</span>
-                </a>
-
-                <!-- Browse Jobs -->
-                <a href="{{ route('candidate.jobs') }}"
-                    class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md
-                        {{ request()->routeIs('candidate.jobs*')
-                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50 hover:text-blue-700 dark:hover:text-blue-300' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
-                    </svg>
-                    <span class="sidebar-label">Browse Jobs</span>
-                </a>
-
-                <!-- My Applications -->
-                <a href="{{ route('candidate.applications') }}"
-                    class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md
-                        {{ request()->routeIs('candidate.applications*')
-                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50 hover:text-blue-700 dark:hover:text-blue-300' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v12a2 2 0 01-2 2z" />
-                    </svg>
-                    <span class="sidebar-label">My Applications</span>
-                </a>
-
-                <!-- Profile -->
-                <a href="{{ route('candidate.profile') }}"
-                    class="transition-base group flex items-center gap-3 px-3 py-2 rounded-md
-                        {{ request()->routeIs('candidate.profile')
-                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50 hover:text-blue-700 dark:hover:text-blue-300' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span class="sidebar-label">Profile</span>
-                </a>
-
-                <!-- Logout -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit"
-                        class="transition-base group flex items-center gap-3 w-full text-left px-3 py-2 rounded-md
-                       text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50
-                       hover:text-blue-700 dark:hover:text-blue-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-5 md:h-5" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6A2.25 2.25 0 0015.75 18.75V15" />
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M18 12H9.75M15.75 9L18 12l-2.25 3" />
-                        </svg>
-                        <span class="sidebar-label">Logout</span>
-                    </button>
-                </form>
-            </nav>
-
-
-        </aside>
 
         <!-- Backdrop for mobile -->
         <div id="sidebar-backdrop" class="hidden fixed inset-0 z-30 bg-black/30 md:hidden" aria-hidden="true"></div>
@@ -206,11 +113,8 @@
 
                 <div class="flex items-center gap-3">
                     <!-- Theme Toggle for Header -->
-                    <!-- Theme Toggle for Header -->
-                    <button x-data="{
-    darkMode: localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)
-}"
-                        @click="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', darkMode)"
+                    <button x-data="{ darkMode: localStorage.getItem('candidate-theme') === 'dark' }"
+                        @click="darkMode = !darkMode; localStorage.setItem('candidate-theme', darkMode ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', darkMode)"
                         class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-base"
                         aria-label="Toggle theme">
                         <template x-if="darkMode">
@@ -260,38 +164,17 @@
                             <div class="py-2">
                                 <a href="{{ route('candidate.profile') }}"
                                     class="flex items-center gap-2 px-4 py-2 text-sm
-           text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="w-5 h-5 text-gray-700 dark:text-gray-300"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M12 12c2.485 0 4.5-2.239 4.5-5S14.485 2 12 2 7.5 4.239 7.5 7s2.015 5 4.5 5z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4 22c0-4 4-7 8-7s8 3 8 7" />
-                                    </svg>
-
-                                    <span>Profile</span>
+                                           text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                                    👤 <span>Profile</span>
                                 </a>
-
 
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit"
                                         class="flex w-full items-center gap-2 px-4 py-2 text-sm
-           text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M18 12H9m9 0l-3-3m3 3l-3 3" />
-                                        </svg>
-
-                                        <span>Logout</span>
+                                               text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                                        🚪 <span>Logout</span>
                                     </button>
-
                                 </form>
                             </div>
                         </div>

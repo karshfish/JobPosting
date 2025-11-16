@@ -10,24 +10,42 @@ class UserManagementController extends Controller
 {
     public function index(Request $request)
     {
+        $loggedIn = $request->user();
+
+        // Admin can see and filter by all roles
         $roles = collect(['all', 'admin', 'employer', 'candidate']);
         $selectedRole = in_array($request->query('role'), $roles->all(), true)
             ? $request->query('role')
             : 'all';
 
-        $query = User::query()->orderBy('name');
+        // Filter by activation status
+        $statuses = collect(['active', 'inactive', 'all']);
+        $selectedStatus = in_array($request->query('status'), $statuses->all(), true)
+            ? $request->query('status')
+            : 'active';
+
+        $query = User::query()->orderByDesc('created_at');
+
+        if ($selectedStatus === 'inactive') {
+            $query->onlyTrashed();
+        } elseif ($selectedStatus === 'all') {
+            $query->withTrashed();
+        }
+
+        // Apply role filter if selected
         if ($selectedRole !== 'all') {
             $query->where('role', $selectedRole);
         }
 
         $users = $query->paginate(12)->withQueryString();
 
-        return view('admin.users.index', compact('users', 'roles', 'selectedRole'));
+        return view('admin.users.index', compact('users', 'roles', 'selectedRole', 'selectedStatus'));
     }
 
     public function edit(User $user)
     {
-        $roles = collect(['admin', 'employer', 'candidate']);
+        // Only admins can edit user roles (authorization enforced via middleware)
+        $roles = collect(['employer', 'candidate']);
         $userRole = $user->role;
         return view('admin.users.edit', compact('user','roles','userRole'));
     }
@@ -35,7 +53,7 @@ class UserManagementController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'role' => ['required', 'in:admin,employer,candidate'],
+            'role' => ['required', 'in:employer,candidate'],
         ]);
 
         $user->role = $validated['role'];
@@ -50,12 +68,28 @@ class UserManagementController extends Controller
             return back()->withErrors(['delete' => 'You cannot delete your own account.']);
         }
 
-        if (($user->role ?? null) === 'admin' || (bool) ($user->is_admin ?? false)) {
-            return back()->withErrors(['delete' => 'You cannot delete an admin user.']);
-        }
-
         $user->delete();
 
-        return redirect()->route('admin.users.index')->with('status', 'User deleted.');
+        return redirect()->route('admin.users.index')->with('status', 'User deactivated.');
+    }
+
+    /**
+     * Restore a soft deleted user.
+     */
+    public function restore(Request $request, int $userId)
+    {
+        $user = User::withTrashed()->findOrFail($userId);
+
+        if (! $user->trashed()) {
+            return redirect()->route('admin.users.index')->with('status', 'User is already active.');
+        }
+
+        if ($request->user()->id === $user->id) {
+            return back()->withErrors(['restore' => 'You cannot restore your own account context.']);
+        }
+
+        $user->restore();
+
+        return redirect()->route('admin.users.index', ['status' => 'inactive'])->with('status', 'User activated.');
     }
 }

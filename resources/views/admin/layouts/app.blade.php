@@ -16,7 +16,7 @@
     })();
   </script>
   @vite(['resources/css/app.css','resources/js/app.js'])
-  <style>
+	  <style>
     /* Smooth hover transitions for nav & buttons */
     .transition-base { transition: all .15s ease-in-out; }
     /* Collapsible sidebar behavior on desktop (match employer layout) */
@@ -32,13 +32,17 @@
     @keyframes fade-in { from { opacity:.0; transform: translateY(8px) } to { opacity:1; transform: none } }
     @keyframes scale-in { from { opacity:.0; transform: scale(.98) } to { opacity:1; transform: scale(1) } }
     .animate-fade-in { animation: fade-in .28s ease-out both; }
-    .animate-scale-in { animation: scale-in .18s ease-out both; }
-  </style>
+	    .animate-scale-in { animation: scale-in .18s ease-out both; }
+	    @media (min-width: 768px) {
+	      .main-with-sidebar-expanded { margin-left: 16rem; }
+	      .main-with-sidebar-collapsed { margin-left: 5rem; }
+	    }
+	  </style>
   </head>
 <body class="min-h-dvh bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
   <div class="min-h-dvh flex">
     <!-- Sidebar -->
-    <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 z-40 w-64 -translate-x-full md:translate-x-0 md:static md:flex bg-white dark:bg-slate-900/50 border-r border-slate-200 dark:border-slate-800 flex-col transition-transform duration-150 ease-in-out">
+    <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 z-40 w-64 -translate-x-full md:translate-x-0 bg-white dark:bg-slate-900/50 border-r border-slate-200 dark:border-slate-800 flex flex-col transition-transform duration-150 ease-in-out">
       <div class="h-16 px-4 md:px-6 flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 min-w-0">
           <img src="{{ asset('assets/logo.jpg') }}" alt="HireHup logo" class="h-8 w-auto rounded">
@@ -84,42 +88,53 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 8.25a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM4.5 18.75a6.75 6.75 0 0 1 13.5 0V20a.75.75 0 0 1-.75.75H5.25A.75.75 0 0 1 4.5 20v-1.25Z"/></svg>
           <span class="sidebar-label">Users</span>
         </a>
-
         <form method="POST" action="{{ route('logout') }}">
           @csrf
           <button type="submit"
                   class="transition-base group flex items-center gap-3 w-full text-left px-3 py-2 rounded-md text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50">
-            <!-- Changed icon to a power symbol (outline) for clarity -->
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5v9m6.364-2.136a7.5 7.5 0 1 1-12.728 0" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.5"
+                 class="nav-icon w-5 h-5 transition-transform duration-150 ease-out group-hover:scale-110 group-hover:translate-x-0.5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6A2.25 2.25 0 0015.75 18.75V15" />
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M18 12H9.75M15.75 9L18 12l-2.25 3" />
             </svg>
             <span class="sidebar-label">Logout</span>
           </button>
         </form>
-      </nav>
-      <div class="sidebar-footer px-4 py-3 border-t border-slate-200 dark:border-slate-800">
+	      </nav>
+      <div class="sidebar-footer px-4 py-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40">
         @if(auth()->check())
-          <div class="mb-2 text-sm font-medium text-slate-800 dark:text-slate-100">{{ auth()->user()->name }}</div>
-          <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Your role</div>
-          <div class="flex flex-wrap gap-1">
-            <span class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->role ?: 'none' }}</span>
+          <div class="flex items-center gap-3 mb-3">
+            <div class="h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-300 text-xs font-semibold">
+              {{ strtoupper(mb_substr(auth()->user()->name ?: 'A', 0, 1)) }}
+            </div>
+            <div class="min-w-0">
+              <p class="text-[11px] uppercase tracking-wide text-slate-400 dark:text-slate-500">Signed in as</p>
+              <p class="text-sm font-medium text-slate-800 dark:text-slate-100 truncate">
+                {{ auth()->user()->name ?: 'Admin' }}
+              </p>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                {{ auth()->user()->email ?: 'No email set' }}
+              </p>
+            </div>
           </div>
-          <form method="POST" action="{{ route('logout') }}" class="mt-3">
-            @csrf
-            <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-md border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-base text-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6A2.25 2.25 0 0 0 5.25 5.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15"/><path d="M12 9l3-3m0 0 3 3m-3-3v12"/></svg>
-              Logout
-            </button>
-          </form>
+
+          <div class="flex items-center gap-2 text-[11px]">
+            <span class="inline-flex items-center px-2 py-0.5 font-medium rounded-full border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+              Role: {{ auth()->user()->role ?: 'none' }}
+            </span>
+          </div>
         @endif
-        <div class="mt-3 text-[11px] text-slate-500 dark:text-slate-400">&copy; {{ date('Y') }} JobPosting</div>
+        <div class="mt-3 text-[11px] text-slate-500 dark:text-slate-400">&copy; 2025 HireHup</div>
       </div>
     </aside>
     <!-- Backdrop for mobile -->
     <div id="sidebar-backdrop" class="hidden fixed inset-0 z-30 bg-black/30 md:hidden" aria-hidden="true"></div>
 
     <!-- Main -->
-    <div class="flex-1 flex flex-col min-w-0">
+    <div id="admin-main" class="flex-1 flex flex-col min-w-0 main-with-sidebar-expanded">
       <header class="sticky top-0 z-30 h-16 bg-white dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800 px-4 md:px-6 flex items-center justify-between shadow-sm animate-scale-in">
           <div class="flex items-center gap-2">
             <!-- Sidebar toggler -->
@@ -146,23 +161,6 @@
       </header>
 
       <main class="p-4 md:p-6 max-w-7xl mx-auto w-full animate-fade-in">
-        @if(session('status'))
-          <div class="mb-4 rounded-md border border-green-200 dark:border-green-900 bg-green-50 dark:bg-emerald-900/30 text-green-800 dark:text-emerald-200 px-4 py-3">
-            {{ session('status') }}
-          </div>
-        @endif
-
-        @if ($errors->any())
-          <div class="mb-4 rounded-md border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200 px-4 py-3">
-            <div class="font-semibold mb-1">There were some problems with your input:</div>
-            <ul class="list-disc list-inside text-sm">
-              @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-              @endforeach
-            </ul>
-          </div>
-        @endif
-
         <div class="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 shadow-sm rounded-lg p-4 md:p-6 transition-all duration-200 hover:shadow-md">
           @yield('content')
         </div>
@@ -196,15 +194,23 @@
     // Sidebar toggle and collapse
     (function() {
       const sidebar = document.getElementById('sidebar');
+      const main = document.getElementById('admin-main');
       const openBtn = document.getElementById('sidebar-open');
       const closeBtn = document.getElementById('sidebar-close');
       const backdrop = document.getElementById('sidebar-backdrop');
       const mq = window.matchMedia('(min-width: 768px)'); // Tailwind md
 
+      const setMainMargin = (collapsed) => {
+        if (!main) return;
+        main.classList.toggle('main-with-sidebar-expanded', !collapsed);
+        main.classList.toggle('main-with-sidebar-collapsed', collapsed);
+      };
+
       const applyCollapsed = () => {
         if (!mq.matches) return; // Only on desktop
         const collapsed = localStorage.getItem('sidebar-collapsed') === '1';
         sidebar.classList.toggle('collapsed', collapsed);
+        setMainMargin(collapsed);
       };
 
       const openMobile = () => { sidebar.classList.remove('-translate-x-full'); backdrop.classList.remove('hidden'); };
@@ -214,6 +220,7 @@
         if (mq.matches) {
           const collapsed = sidebar.classList.toggle('collapsed');
           localStorage.setItem('sidebar-collapsed', collapsed ? '1' : '0');
+          setMainMargin(collapsed);
         } else {
           if (sidebar.classList.contains('-translate-x-full')) openMobile(); else closeMobile();
         }
@@ -228,6 +235,9 @@
           applyCollapsed();
         } else {
           sidebar.classList.remove('collapsed');
+          if (main) {
+            main.classList.remove('main-with-sidebar-expanded', 'main-with-sidebar-collapsed');
+          }
         }
       });
 
@@ -235,5 +245,66 @@
       applyCollapsed();
     })();
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	  <script>
+	    (function () {
+	      const hasStatus = @json(session('status') ? true : false);
+      const statusMessage = @json(session('status'));
+      const hasErrorMessage = @json(session('error') ? true : false);
+      const errorMessage = @json(session('error'));
+      const validationErrors = @json($errors->all());
+
+      if (hasStatus && statusMessage) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: statusMessage,
+          confirmButtonColor: '#4f46e5'
+        });
+      }
+
+      if (hasErrorMessage && errorMessage) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: errorMessage,
+          confirmButtonColor: '#ef4444'
+        });
+      }
+
+      if (validationErrors && validationErrors.length) {
+        const html = '<ul style="text-align:left;margin:0;padding-left:1.25rem;">'
+          + validationErrors.map(function (e) { return '<li>' + e + '</li>'; }).join('')
+          + '</ul>';
+	        Swal.fire({
+	          icon: 'error',
+	          title: 'There were some problems with your input:',
+	          html: html,
+	          confirmButtonColor: '#ef4444'
+	        });
+	      }
+
+	      const deleteForms = document.querySelectorAll('.js-user-delete-form');
+	      deleteForms.forEach(function (form) {
+	        form.addEventListener('submit', function (e) {
+	          e.preventDefault();
+	          Swal.fire({
+	            title: 'Delete this user?',
+	            text: 'This action cannot be undone.',
+	            icon: 'warning',
+	            showCancelButton: true,
+	            confirmButtonColor: '#ef4444',
+	            cancelButtonColor: '#6b7280',
+	            confirmButtonText: 'Yes, delete',
+	            cancelButtonText: 'Cancel'
+	          }).then(function (result) {
+	            if (result.isConfirmed) {
+	              form.submit();
+	            }
+	          });
+	        });
+	      });
+	    })();
+	  </script>
   </body>
 </html>

@@ -24,24 +24,6 @@ class DatabaseSeeder extends Seeder
         // Create sample applications
         Application::factory(20)->create();
 
-        // Ensure an admin user exists and has admin role (string column)
-        $adminEmail = env('ADMIN_EMAIL', 'admin@example.com');
-        $adminPassword = env('ADMIN_PASSWORD', 'password');
-
-        $admin = User::firstOrCreate(
-            ['email' => $adminEmail],
-            [
-                'name' => 'Admin',
-                'password' => bcrypt($adminPassword),
-                'role' => 'admin',
-            ]
-        );
-
-        if ($admin->role !== 'admin') {
-            $admin->role = 'admin';
-            $admin->save();
-        }
-
         // Optional: demo user
         User::firstOrCreate(
             ['email' => 'test@example.com'],
@@ -52,7 +34,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-         // Call your seeders here
+        // Call your seeders here
         $this->call([
             UserSeeder::class,
             CategorySeeder::class,
@@ -61,4 +43,3 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 }
-

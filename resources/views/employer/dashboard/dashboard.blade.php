@@ -126,6 +126,7 @@
             @endforeach
         </div>
 
+
         {{-- Recent Jobs Table --}}
         <di class="bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden">
             <!-- Header -->

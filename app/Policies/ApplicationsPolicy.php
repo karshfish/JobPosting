@@ -13,7 +13,7 @@ class ApplicationsPolicy
      */
     public function viewAny(User $user): bool
     {
-        return in_array($user->role, ['employer', 'admin']);
+        return in_array($user->role, ['employer', 'admin'], true);
     }
 
     /**
@@ -21,7 +21,7 @@ class ApplicationsPolicy
      */
     public function view(User $user, Application $application): bool
     {
-        return in_array($user->role, ['employer', 'admin']);
+        return in_array($user->role, ['employer', 'admin'], true);
     }
 
     /**
