@@ -303,9 +303,9 @@
                                     <div class="flex items-start space-x-3">
                                         <!-- User Avatar -->
                                         <div class="flex-shrink-0">
-                                            @if ($comment->user->profile_photo_url)
+                                            @if ($comment->user->profile_photo_path)
                                                 <img class="h-10 w-10 rounded-full object-cover"
-                                                    src="{{ $comment->user->profile_photo_url }}"
+                                                    src="{{ $comment->user->profile_photo_path }}"
                                                     alt="{{ $comment->user->name }}">
                                             @else
                                                 <div
@@ -362,9 +362,9 @@
                                                     @foreach ($comment->replies as $reply)
                                                         <div class="flex items-start space-x-3 text-sm">
                                                             <div class="flex-shrink-0">
-                                                                @if ($reply->user->profile_photo_url)
+                                                                @if ($reply->user->profile_photo_path)
                                                                     <img class="h-8 w-8 rounded-full object-cover"
-                                                                        src="{{ $reply->user->profile_photo_url }}"
+                                                                        src="{{ $reply->user->profile_photo_path }}"
                                                                         alt="{{ $reply->user->name }}">
                                                                 @else
                                                                     <div
@@ -416,13 +416,13 @@
         <div class="bg-white h-96 relative md:col-span-4 rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-lg transition-all duration-200">
             <!-- Status Badge -->
         @php $s = $post->status ?? 'draft'; @endphp
-        
+
         <span class="px-3 absolute top-3 right-3 py-1 rounded-full text-xs font-medium flex items-center gap-2
             {{ $s === 'published' ? 'bg-green-100 text-green-700' :
                ($s === 'draft' ? 'bg-yellow-100 text-yellow-700' :
                ($s === 'closed' ? 'bg-gray-200 text-gray-700' :
                'bg-red-100 text-red-700')) }}">
-           
+
             <span class="w-2 h-2 rounded-full
                 {{ $s === 'published' ? 'bg-green-500' :
                    ($s === 'draft' ? 'bg-yellow-500' :
@@ -435,8 +435,8 @@
             <!-- Company Logo -->
             <div class="w-24 h-24 mx-auto mb-5 rounded-full overflow-hidden bg-gray-100 border flex items-center justify-center">
                 @if (!empty($post->branding_image))
-                    <img src="{{ asset('storage/' . $post->branding_image) }}" 
-                         alt="{{ $post->title }}" 
+                    <img src="{{ asset('storage/' . $post->branding_image) }}"
+                         alt="{{ $post->title }}"
                          class="w-full h-full object-cover">
                 @else
                     <svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -466,7 +466,7 @@
             </div>
         </div>
 
-        
+
 
     </div>
 
@@ -525,7 +525,7 @@
                     bg-blue-600 text-white hover:bg-blue-700
                 @endif"
             @if ($applied || $notPublished) onclick="return false;" @endif>
-            
+
             @if ($notPublished)
                 Not Available
             @elseif($applied)
