@@ -23,5 +23,6 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::resource('categories', CategoryController::class);
         // Companies removed from admin
+        Route::patch('/users/{user}/restore', [UserManagementController::class, 'restore'])->name('users.restore');
         Route::resource('users', UserManagementController::class)->only(['index', 'edit', 'update', 'destroy']);
     });

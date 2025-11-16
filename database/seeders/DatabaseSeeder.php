@@ -24,24 +24,6 @@ class DatabaseSeeder extends Seeder
         // Create sample applications
         Application::factory(20)->create();
 
-        // Ensure a single super admin user exists (created only via seeder)
-        $adminEmail = 'superAdmin@gmail.com';
-        $adminPassword = env('ADMIN_PASSWORD', 'password');
-
-        $admin = User::firstOrCreate(
-            ['email' => $adminEmail],
-            [
-                'name' => 'Super Admin',
-                'password' => bcrypt($adminPassword),
-                'role' => 'admin',
-            ]
-        );
-
-        // Always enforce role as super_admin for this seeded account
-        if ($admin->role !== 'super_admin') {
-            $admin->forceFill(['role' => 'admin'])->save();
-        }
-
         // Optional: demo user
         User::firstOrCreate(
             ['email' => 'test@example.com'],
