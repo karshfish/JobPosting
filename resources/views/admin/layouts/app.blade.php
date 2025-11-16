@@ -123,7 +123,7 @@
 
           <div class="flex items-center gap-2 text-[11px]">
             <span class="inline-flex items-center px-2 py-0.5 font-medium rounded-full border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
-              Role: {{ auth()->user()->role === 'super_admin' ? 'Super Admin' : (auth()->user()->role ?: 'none') }}
+              Role: {{ auth()->user()->role ?: 'none' }}
             </span>
           </div>
         @endif
