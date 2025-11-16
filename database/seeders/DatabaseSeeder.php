@@ -33,13 +33,13 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Super Admin',
                 'password' => bcrypt($adminPassword),
-                'role' => 'super_admin',
+                'role' => 'admin',
             ]
         );
 
         // Always enforce role as super_admin for this seeded account
         if ($admin->role !== 'super_admin') {
-            $admin->forceFill(['role' => 'super_admin'])->save();
+            $admin->forceFill(['role' => 'admin'])->save();
         }
 
         // Optional: demo user
@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-         // Call your seeders here
+        // Call your seeders here
         $this->call([
             UserSeeder::class,
             CategorySeeder::class,

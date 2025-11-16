@@ -11,17 +11,13 @@ Route::get('/employer', function () {
     return redirect()->route('employer.dashboard');
 });
 // Route::middleware(['auth', 'role:employer'])->group(function () {
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'role:employer')->group(function () {
     Route::resource('jobs', JobPostController::class);
     Route::post('/jobs/{job}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
     Route::get('/employer/dashboard', [EmployerDashboardController::class, 'index'])->name('employer.dashboard');
     Route::get('/employer/analysis', [AnalysisController::class, 'index'])
-    ->name('employer.analysis');
+        ->name('employer.analysis');
     Route::resource('employer/applications', ApplicationsController::class)
-    ->names('Applications');
-  });
-
-
-
-
+        ->names('Applications');
+});

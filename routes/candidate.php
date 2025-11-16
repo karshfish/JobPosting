@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\Employer\JobPostController;
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'role:candidate')->group(function () {
     Route::get('/candidate/dashboard', [CandidateController::class, 'dashboard'])->name('candidate.dashboard');
     Route::get('/candidate/profile', [CandidateController::class, 'editProfile'])->name('candidate.profile');
     Route::put('/candidate/profile', [CandidateController::class, 'updateProfile'])->name('candidate.updateProfile');

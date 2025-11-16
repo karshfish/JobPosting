@@ -9,11 +9,11 @@ use Illuminate\Foundation\Configuration\Middleware;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
 
-    web: [
-        __DIR__ . '/../routes/web.php',
-        __DIR__ . '/../routes/candidate.php', // أضف هذا السطر
-    ],
-        commands: __DIR__.'/../routes/console.php',
+        web: [
+            __DIR__ . '/../routes/web.php',
+            __DIR__ . '/../routes/candidate.php', // أضف هذا السطر
+        ],
+        commands: __DIR__ . '/../routes/console.php',
 
         health: '/up',
     )
@@ -22,7 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             // Bypass all authz/authn checks
             'auth' => AllowAllMiddleware::class,
             'verified' => AllowAllMiddleware::class,
-            'role' => AllowAllMiddleware::class,
+            'role' => RoleMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
