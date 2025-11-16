@@ -507,35 +507,28 @@
 
     </div>
 
-    <!-- Apply Button -->
-    <div class="mt-6">
-        @php
+   <!-- Apply Button -->
+        <div class="mt-6">
+            @php
             $user = auth()->user();
-            $applied = $user?->candidate?->applications()->where('job_id', $post->id)->exists() ?? false;
+            $applied = \App\Models\Application::where('user_id', $user->id)
+            ->where('job_id', $post->id)
+            ->exists();
             $notPublished = $post->status !== 'published';
-        @endphp
+            $btnClasses = $notPublished
+            ? 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed'
+            : ($applied
+            ? 'bg-gray-400 dark:bg-gray-700 text-white cursor-not-allowed'
+            : 'bg-blue-600 dark:bg-blue-700 text-white hover:bg-blue-700 dark:hover:bg-blue-600');
+            $btnText = $notPublished ? 'Not Available' : ($applied ? 'Already Applied' : 'Apply');
+            $btnLink = ($applied || $notPublished) ? '#' : route('candidate.jobs.apply', $post);
+            @endphp
 
-        <a href="{{ $applied || $notPublished ? '#' : route('candidate.jobs.apply', $post) }}"
-            class="block w-full text-center px-4 py-2 font-semibold rounded-lg transition
-                @if ($notPublished)
-                    bg-gray-300 text-gray-600 cursor-not-allowed
-                @elseif($applied)
-                    bg-gray-400 text-white cursor-not-allowed
-                @else
-                    bg-blue-600 text-white hover:bg-blue-700
-                @endif"
-            @if ($applied || $notPublished) onclick="return false;" @endif>
-
-            @if ($notPublished)
-                Not Available
-            @elseif($applied)
-                Already Applied
-            @else
-                Apply
-            @endif
-
-        </a>
-    </div>
+            <a href="{{ $btnLink }}" class="block w-full text-center px-4 py-2 font-semibold rounded-lg transition {{ $btnClasses }}"
+                @if ($applied || $notPublished) onclick="return false;" @endif>
+                {{ $btnText }}
+            </a>
+        </div>
 
     <!-- Notes -->
     <div class="mt-3 text-xs text-gray-500">

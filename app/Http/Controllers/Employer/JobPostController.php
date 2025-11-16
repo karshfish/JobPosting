@@ -18,7 +18,67 @@ class JobPostController extends Controller
      */
     public function index(Request $request)
 {
-    
+    // Always return only published jobs
+    $query = JobPost::where('status', 'published');
+
+    // Keywords
+    if ($request->filled('keywords')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('title', 'like', '%' . $request->keywords . '%')
+              ->orWhere('description', 'like', '%' . $request->keywords . '%');
+        });
+    }
+
+    // Location
+    if ($request->filled('location')) {
+        $query->where('location', 'like', '%' . $request->location . '%');
+    }
+
+    // Category
+    if ($request->filled('category')) {
+        $query->where('category_id', $request->category);
+    }
+
+    // Salary Range
+    if ($request->filled('salary')) {
+        $salary = $request->salary;
+
+        $query->where(function ($q) use ($salary) {
+            $q->where('salary_min', '<=', $salary)
+              ->where('salary_max', '>=', $salary);
+        });
+    }
+
+    // Date Posted
+    if ($request->filled('date_posted')) {
+        if ($request->date_posted == 'today') {
+            $query->whereDate('created_at', now());
+        } elseif ($request->date_posted == 'week') {
+            $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($request->date_posted == 'month') {
+            $query->whereMonth('created_at', now()->month);
+        }
+    }
+
+    // Only published jobs will be returned from the query
+    $jobPosts = $query->paginate(10);
+
+    // Side stats
+    $categories = Category::all();
+
+    $allCount = JobPost::count();
+    $publishedCount = JobPost::where('status', 'published')->count();
+    $draftCount = JobPost::where('status', 'draft')->count();
+    $closedCount = JobPost::where('status', 'closed')->count();
+
+    return view('employer.jobs.index', compact(
+        'jobPosts',
+        'categories',
+        'allCount',
+        'publishedCount',
+        'draftCount',
+        'closedCount'
+    ));
 }
 
 
