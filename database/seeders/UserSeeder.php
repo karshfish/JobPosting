@@ -13,5 +13,10 @@ class UserSeeder extends Seeder
         User::factory(5)->create([
             'role' => 'candidate',
         ]);
+
+        User::factory()
+            ->admin()
+            ->count(3)
+            ->create();
     }
 }

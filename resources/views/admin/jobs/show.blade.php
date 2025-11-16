@@ -46,7 +46,7 @@
           </span>
         </div>
         <div class="text-sm text-slate-500 dark:text-slate-400">
-          {{ $job->user->name ?? 'Unknown company' }}
+          {{ $job->user->name ?? 'Unknown employer' }}
           @if($job->category)
             · <span>{{ $job->category->name }}</span>
           @endif

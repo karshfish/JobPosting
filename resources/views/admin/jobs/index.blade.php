@@ -68,7 +68,7 @@
       <thead class="bg-slate-50 dark:bg-slate-900/80">
         <tr class="text-left text-slate-600 dark:text-slate-300 text-xs uppercase tracking-wider">
           <th class="px-3 py-2">Title</th>
-          <th class="px-3 py-2">Company</th>
+          <th class="px-3 py-2">employer</th>
           <th class="px-3 py-2 hidden sm:table-cell">Applications</th>
           <th class="px-3 py-2">Status</th>
           <th class="px-3 py-2 text-right">Actions</th>
