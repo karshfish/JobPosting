@@ -66,6 +66,74 @@
                 </h2>
                 <p class="text-gray-600 dark:text-gray-400 leading-relaxed">{{ $job->description }}</p>
             </div>
+            {{-- LinkedIn Autofill Section --}}
+<div class="mb-8 p-5 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-xl">
+    <h2 class="text-lg font-semibold text-blue-700 dark:text-blue-300 mb-3 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M4.98 3.5C3.33 3.5 2 4.83 2 6.48c0 1.64 1.32 2.97 2.98 2.97h.02c1.65 0 2.98-1.33 2.98-2.97C7.98 4.83 6.65 3.5 4.98 3.5zM2.4 21.5h5.17V8.98H2.4V21.5zM9.34 8.98V21.5h5.17v-6.48c0-3.42 4.39-3.7 4.39 0V21.5H24v-7.93c0-6.92-7.52-6.67-9.49-3.27V8.98H9.34z"/>
+        </svg>
+        Autofill Your Application
+    </h2>
+
+    @if(auth()->user()->linkedin_connected)
+        <p class="text-gray-700 dark:text-gray-300 mb-3">
+            LinkedIn connected ✔ — You can autofill your data.
+        </p>
+
+        <button
+            type="button"
+            id="linkedin-autofill-btn"
+            class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition">
+            Autofill from LinkedIn
+        </button>
+    @else
+        <button
+            type="button"
+            id="linkedin-connect-btn"
+            class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition inline-flex items-center">
+            Connect LinkedIn
+        </button>
+    @endif
+</div>
+
+{{-- JS to Autofill Fields --}}
+@if(auth()->user()->linkedin_connected)
+<script>
+    document.getElementById('linkedin-autofill-btn')?.addEventListener('click', async () => {
+        try {
+            const res = await fetch('{{ route("linkedin.fetch") }}');
+            const data = await res.json();
+
+            if (data.success) {
+                document.querySelector('input[name="name"]').value = data.name ?? '';
+                document.querySelector('input[name="email"]').value = data.email ?? '';
+                document.querySelector('input[name="phone"]').value = data.phone ?? '';
+
+                alert("Your LinkedIn data has been filled in!");
+            }
+        } catch (e) {
+            alert("Could not fetch LinkedIn data.");
+        }
+    });
+</script>
+@endif
+
+@if(!auth()->user()->linkedin_connected)
+<script>
+    document.getElementById('linkedin-connect-btn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        const width = 600;
+        const height = 700;
+        const left = (window.screen.width / 2) - (width / 2);
+        const top = (window.screen.height / 2) - (height / 2);
+        window.open(
+            '{{ route('linkedin.redirect') }}',
+            'LinkedInLogin',
+            `width=${width},height=${height},top=${top},left=${left},resizable,scrollbars=yes,status=1`
+        );
+    });
+</script>
+@endif
 
             {{-- Candidate Application Form --}}
             <form action="{{ route('candidate.jobs.submit', $job) }}" method="POST" enctype="multipart/form-data"

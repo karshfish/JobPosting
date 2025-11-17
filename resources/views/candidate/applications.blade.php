@@ -1,4 +1,24 @@
 <x-candidate-layout>
+    <div class="mt-6">
+    @if(auth()->user()->linkedin_id)
+        <div class="flex items-center space-x-4">
+            <img src="{{ auth()->user()->linkedin_data['avatar'] ?? '' }}" alt="LinkedIn Avatar" class="w-12 h-12 rounded-full">
+            <div>
+                <div class="font-medium">{{ auth()->user()->linkedin_data['name'] ?? '' }}</div>
+                <form action="{{ route('linkedin.disconnect') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="text-sm text-red-600 hover:underline">Disconnect LinkedIn</button>
+                </form>
+            </div>
+        </div>
+    @else
+        <a href="{{ route('linkedin.redirect') }}"
+           class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Prefil with LinkedIn
+        </a>
+    @endif
+</div>
+
     <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 p-6 mb-8">
         <div class="flex justify-between items-center mb-6 border-b dark:border-gray-600 pb-3">
             <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">My Job Applications</h2>

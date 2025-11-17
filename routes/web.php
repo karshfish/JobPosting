@@ -1,3 +1,4 @@
+
 <?php
 
 
@@ -30,7 +31,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
+// Session test routes for debugging
+Route::get('/session-test/set', function (\Illuminate\Http\Request $request) {
+    $request->session()->put('test_key', 'test_value');
+    return 'Session value set. <a href="/session-test/get">Check value</a>';
+});
+Route::get('/session-test/get', function (\Illuminate\Http\Request $request) {
+    $val = $request->session()->get('test_key', 'not set');
+    return 'Session value is: ' . $val;
+});
 
 require __DIR__ . '/admin.php';
 require __DIR__ . '/auth.php';
