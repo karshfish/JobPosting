@@ -18,8 +18,14 @@ class DatabaseSeeder extends Seeder
         // Create 10 users with candidate profiles
         Candidate::factory(10)->create();
 
-        // Create jobs for testing (assuming Job model ready)
-        JobPost::factory(10)->create();
+        // Create jobs for testing and soft delete the closed ones
+        JobPost::factory(10)
+            ->create()
+            ->each(function (JobPost $job) {
+                if ($job->status === 'closed') {
+                    $job->delete();
+                }
+            });
 
         // Create sample applications
         Application::factory(20)->create();

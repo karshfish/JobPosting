@@ -84,10 +84,10 @@ class HomeController extends Controller
     // Side stats
     $categories = Category::all();
 
-    $allCount = JobPost::count();
+    $allCount = JobPost::withTrashed()->count();
     $publishedCount = JobPost::where('status', 'published')->count();
     $draftCount = JobPost::where('status', 'draft')->count();
-    $closedCount = JobPost::where('status', 'closed')->count();
+    $closedCount = JobPost::withTrashed()->where('status', 'closed')->count();
 
     return view('pages.jobs', compact(
         'jobPosts',

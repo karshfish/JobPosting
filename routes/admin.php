@@ -14,9 +14,15 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::get('/jobs', [JobModerationController::class, 'index'])->name('jobs.index');
         Route::get('/jobs/pending', [JobModerationController::class, 'pending'])->name('jobs.pending');
+        Route::get('/jobs/published', [JobModerationController::class, 'published'])->name('jobs.published');
+        Route::get('/jobs/trashed', [JobModerationController::class, 'trashed'])->name('jobs.trashed');
         Route::get('/jobs/{job}', [JobModerationController::class, 'show'])->name('jobs.show');
         Route::post('/jobs/{job}/approve', [JobModerationController::class, 'approve'])->name('jobs.approve');
         Route::post('/jobs/{job}/reject', [JobModerationController::class, 'reject'])->name('jobs.reject');
+        Route::patch('/jobs/{job}/republish', [JobModerationController::class, 'republish'])->name('jobs.republish');
+        Route::delete('/jobs/{job}', [JobModerationController::class, 'destroy'])->name('jobs.destroy');
+        Route::patch('/jobs/{job}/restore', [JobModerationController::class, 'restore'])->name('jobs.restore');
+        Route::delete('/jobs/{job}/force-delete', [JobModerationController::class, 'forceDelete'])->name('jobs.force-delete');
 
         Route::get('/applications', [ApplicationManagementController::class, 'index'])->name('applications.index');
         Route::get('/applications/{application}', [ApplicationManagementController::class, 'show'])->name('applications.show');

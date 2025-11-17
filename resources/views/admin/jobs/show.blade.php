@@ -48,38 +48,68 @@
         <div class="text-sm text-slate-500 dark:text-slate-400">
           {{ $job->user->name ?? 'Unknown employer' }}
           @if($job->category)
-            · <span>{{ $job->category->name }}</span>
+            A� <span>{{ $job->category->name }}</span>
           @endif
           @if($job->location)
-            · <span>{{ $job->location }}</span>
+            A� <span>{{ $job->location }}</span>
           @endif
         </div>
       </div>
 
       <div class="flex flex-wrap gap-2 justify-end">
-        @if($status === 'draft')
-          <form method="POST" action="{{ route('admin.jobs.approve', $job) }}">
-            @csrf
-            <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded border border-emerald-300 text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-base text-sm">
-              Approve
-            </button>
-          </form>
+        @if(method_exists($job, 'trashed') && $job->trashed())
+          @if($status === 'closed')
+            <form method="POST" action="{{ route('admin.jobs.republish', $job->id) }}">
+              @csrf
+              @method('PATCH')
+              <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded border border-emerald-300 text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-base text-sm">
+                Republish
+              </button>
+            </form>
+          @else
+            <form method="POST" action="{{ route('admin.jobs.restore', $job->id) }}">
+              @csrf
+              @method('PATCH')
+              <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded border border-emerald-300 text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-base text-sm">
+                Restore
+              </button>
+            </form>
+          @endif
 
-          <form method="POST" action="{{ route('admin.jobs.reject', $job) }}">
+          <form method="POST" action="{{ route('admin.jobs.force-delete', $job->id) }}" class="js-job-force-delete-form">
             @csrf
-            <input type="hidden" name="reason" value="Not suitable.">
-            <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded border border-rose-300 text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-base text-sm">
-              Reject
+            @method('DELETE')
+            <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded border border-rose-500 text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-base text-sm">
+              Delete
             </button>
           </form>
-        @elseif($status === 'published')
-          <form method="POST" action="{{ route('admin.jobs.reject', $job) }}">
-            @csrf
-            <input type="hidden" name="reason" value="Not suitable.">
-            <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded border border-rose-300 text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-base text-sm">
-              Close job
-            </button>
-          </form>
+        @else
+          @if($status === 'draft')
+            <form method="POST" action="{{ route('admin.jobs.approve', $job) }}">
+              @csrf
+              <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded border border-emerald-300 text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-base text-sm">
+                Approve
+              </button>
+            </form>
+
+            <form method="POST" action="{{ route('admin.jobs.reject', $job) }}">
+              @csrf
+              <input type="hidden" name="reason" value="Not suitable.">
+              <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded border border-rose-300 text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-base text-sm">
+                Reject
+              </button>
+            </form>
+          @elseif($status === 'published')
+            <form method="POST" action="{{ route('admin.jobs.reject', $job) }}">
+              @csrf
+              <input type="hidden" name="reason" value="Not suitable.">
+              <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded border border-rose-300 text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-base text-sm">
+                Close job
+              </button>
+            </form>
+          @endif
+
+          {{-- No separate archive button; closed jobs are soft deleted via reject/close --}}
         @endif
       </div>
     </div>
@@ -107,7 +137,7 @@
               {{ number_format($salaryMin, 0) }}
             @endif
             @if($salaryMin && $salaryMax)
-              –
+              �?"
             @endif
             @if($salaryMax)
               {{ number_format($salaryMax, 0) }}
@@ -215,15 +245,20 @@
           </div>
           <div class="flex justify-between gap-2">
             <dt class="text-slate-500 dark:text-slate-400">Created</dt>
-            <dd>{{ optional($job->created_at)->toDayDateTimeString() ?? '—' }}</dd>
+            <dd>{{ optional($job->created_at)->toDayDateTimeString() ?? '�?"' }}</dd>
           </div>
           <div class="flex justify-between gap-2">
             <dt class="text-slate-500 dark:text-slate-400">Last updated</dt>
-            <dd>{{ optional($job->updated_at)->toDayDateTimeString() ?? '—' }}</dd>
+            <dd>{{ optional($job->updated_at)->toDayDateTimeString() ?? '�?"' }}</dd>
           </div>
+          @if(method_exists($job, 'trashed') && $job->trashed())
+            <div class="flex justify-between gap-2">
+              <dt class="text-slate-500 dark:text-slate-400">Archived at</dt>
+              <dd>{{ optional($job->deleted_at)->toDayDateTimeString() ?? '�?"' }}</dd>
+            </div>
+          @endif
         </dl>
       </section>
     </div>
   </div>
 @endsection
-

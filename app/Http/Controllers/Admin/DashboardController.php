@@ -20,10 +20,10 @@ class DashboardController extends Controller
         // High level stats
         $stats = [
             'jobs' => [
-                'total' => JobPost::count(),
+                'total' => JobPost::withTrashed()->count(),
                 'draft' => JobPost::where('status', 'draft')->count(),
                 'published' => JobPost::where('status', 'published')->count(),
-                'closed' => JobPost::where('status', 'closed')->count(),
+                'closed' => JobPost::withTrashed()->where('status', 'closed')->count(),
             ],
             'applications' => [
                 'total' => Application::count(),
@@ -38,7 +38,8 @@ class DashboardController extends Controller
         ];
 
         // Aggregated data for charts
-        $jobsByStatus = JobPost::selectRaw('status, COUNT(*) as total')
+        $jobsByStatus = JobPost::withTrashed()
+            ->selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status');
 

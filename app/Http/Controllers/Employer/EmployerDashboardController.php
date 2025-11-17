@@ -18,8 +18,8 @@ public function index(Request $request)
 {
     $userId = Auth::id();
 
-    // Base query for this employer's jobs
-    $query = JobPost::where('user_id', $userId);
+    // Base query for this employer's jobs (include soft deleted closed jobs)
+    $query = JobPost::withTrashed()->where('user_id', $userId);
 
     // Apply filters
     if ($request->filled('status')) {
@@ -51,10 +51,10 @@ public function index(Request $request)
     }
 
     // Count summary (not filtered)
-    $totalJobs = JobPost::where('user_id', $userId)->count();
+    $totalJobs = JobPost::withTrashed()->where('user_id', $userId)->count();
     $publishedJobs = JobPost::where('user_id', $userId)->where('status', 'published')->count();
     $draftJobs = JobPost::where('user_id', $userId)->where('status', 'draft')->count();
-    $closedJobs = JobPost::where('user_id', $userId)->where('status', 'closed')->count();
+    $closedJobs = JobPost::withTrashed()->where('user_id', $userId)->where('status', 'closed')->count();
 
     // Latest jobs (filtered)
     $latestJobs = $query->latest()->paginate(5);

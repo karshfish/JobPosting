@@ -307,6 +307,48 @@
 	          });
 	        });
 	      });
+
+        const jobArchiveForms = document.querySelectorAll('.js-job-delete-form');
+        jobArchiveForms.forEach(function (form) {
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            Swal.fire({
+              title: 'Archive this job?',
+              text: 'The job will be moved to the Archived tab and can be restored later.',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#ef4444',
+              cancelButtonColor: '#6b7280',
+              confirmButtonText: 'Yes, archive',
+              cancelButtonText: 'Cancel'
+            }).then(function (result) {
+              if (result.isConfirmed) {
+                form.submit();
+              }
+            });
+          });
+        });
+
+        const jobForceDeleteForms = document.querySelectorAll('.js-job-force-delete-form');
+        jobForceDeleteForms.forEach(function (form) {
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            Swal.fire({
+              title: 'Delete this job?',
+              text: 'This action cannot be undone.',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#ef4444',
+              cancelButtonColor: '#6b7280',
+              confirmButtonText: 'Yes, delete',
+              cancelButtonText: 'Cancel'
+            }).then(function (result) {
+              if (result.isConfirmed) {
+                form.submit();
+              }
+            });
+          });
+        });
 	    })();
 	  </script>
   </body>

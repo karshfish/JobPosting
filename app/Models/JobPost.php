@@ -6,12 +6,13 @@ use App\Policies\JobsPolicy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[UsePolicy(JobsPolicy::class)]
 class JobPost extends Model
 {
     /** @use HasFactory<\Database\Factories\JobPostFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',
