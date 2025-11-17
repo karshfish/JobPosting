@@ -194,11 +194,7 @@
                 </form>
             </nav>
 
-
-
-
-
-            <div class="sidebar-footer px-4 py-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40">
+            <div class="sidebar-footer px-4 py-5 border-t border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/40">
                 @if (auth()->check())
                     <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Your name : <span
                             class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->name ?: 'none' }}</span>
@@ -208,40 +204,6 @@
                     </div>
                     <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">Your role : <span
                             class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200">{{ auth()->user()->role ?: 'none' }}</span>
-                    </div>
-
-                    <div class="py-3 flex items-center justify-center gap-3" x-data="{ profileOpen: false, darkMode: localStorage.theme === 'dark' }"
-                        x-init="if (darkMode) document.documentElement.classList.add('dark');
-                        else document.documentElement.classList.remove('dark');">
-
-                        <div class="flex items-center" x-data="{ darkMode: localStorage.theme === 'dark' }"
-                            x-init="if (darkMode) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');">
-                            <button
-                                @click="
-                                    darkMode = !darkMode;
-                                    localStorage.theme = darkMode ? 'dark' : 'light';
-                                    document.documentElement.classList.toggle('dark', darkMode);
-                                "
-                                class="inline-flex items-center justify-center p-2 rounded-full border border-slate-300 dark:border-slate-700
-                       text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50
-                       transition-all duration-200"
-                                aria-label="Toggle dark mode">
-                                <template x-if="darkMode">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                         stroke-width="1.5" class="w-4 h-4 text-yellow-300 drop-shadow">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                              d="M12 3.75a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V4.5A.75.75 0 0 1 12 3.75Zm0 13.5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V18A.75.75 0 0 1 12 17.25Zm8.25-5.25a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75Zm-13.5 0a.75.75 0 0 1-.75.75H4.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM17.03 7.03a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 0 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm-8.94 8.94a.75.75 0 0 1 0 1.06L7.03 18.09a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm0-7.88L7.03 7.03A.75.75 0 0 1 8.09 5.97l1.06 1.06A.75.75 0 0 1 8.09 8.09Zm8.94 8.94-1.06-1.06a.75.75 0 1 1 1.06-1.06l1.06 1.06a.75.75 0 0 1-1.06 1.06ZM12 8.25A3.75 3.75 0 1 0 15.75 12 3.75 3.75 0 0 0 12 8.25Z"/>
-                                    </svg>
-                                </template>
-                                <template x-if="!darkMode">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                         stroke-width="1.5" class="w-4 h-4 text-slate-500">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                              d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
-                                    </svg>
-                                </template>
-                            </button>
-                        </div>
                     </div>
                 @endif
                 <div class="mt-3 text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
@@ -279,6 +241,48 @@
                 <div class="flex items-center gap-3" x-data="{ profileOpen: false, darkMode: localStorage.theme === 'dark' }" x-init="if (darkMode) document.documentElement.classList.add('dark');
                 else document.documentElement.classList.remove('dark');">
 
+                    <div class="flex items-center"
+     x-data="{ darkMode: localStorage.theme === 'dark' }"
+     x-init="
+        document.documentElement.classList.toggle('dark', darkMode);
+     "
+>
+    <button
+        @click="
+            darkMode = !darkMode;
+            localStorage.theme = darkMode ? 'dark' : 'light';
+            document.documentElement.classList.toggle('dark', darkMode);
+        "
+        class="inline-flex items-center justify-center p-2 rounded-full border border-slate-300 dark:border-slate-700
+               text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50
+               transition-all duration-200"
+        aria-label="Toggle dark mode"
+    >
+
+        <!-- Light Mode Icon (Sun) -->
+        <template x-if="!darkMode">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor"
+                 class="w-5 h-5 text-yellow-500">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 3v2.25M12 18.75V21M4.22 4.22l1.59 1.59M18.19 18.19l1.59 1.59M3 12h2.25M18.75 12H21M4.22 19.78l1.59-1.59M18.19 5.81l1.59-1.59M12 8.25A3.75 3.75 0 1 0 15.75 12 3.75 3.75 0 0 0 12 8.25Z" />
+            </svg>
+        </template>
+
+        <!-- Dark Mode Icon (Moon) -->
+        <template x-if="darkMode">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor"
+                 class="w-5 h-5 text-slate-300">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+            </svg>
+        </template>
+
+    </button>
+</div>
 
                     <!-- 👤 Profile Dropdown -->
                     <div class="relative">
@@ -316,7 +320,7 @@
 
                                 {{-- Home (visible only for logged users) --}}
                                 @auth
-                                    <a href="{{ route('jobs.index') }}"
+                                    <a href="{{ route('home') }}"
                                         class="flex items-center gap-2 px-4 py-2 text-sm
                    text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition">
                                         🏠 <span>Home</span>

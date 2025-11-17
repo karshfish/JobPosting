@@ -71,7 +71,7 @@ class JobPostController extends Controller
     $draftCount = JobPost::where('status', 'draft')->count();
     $closedCount = JobPost::where('status', 'closed')->count();
 
-    return view('employer.jobs.index', compact(
+    return view('pages.jobs', compact(
         'jobPosts',
         'categories',
         'allCount',
@@ -145,7 +145,7 @@ class JobPostController extends Controller
             'comments.replies.user',
         ]);
 
-        return view('employer.jobs.show', compact('job'));
+        return view('pages.show', compact('job'));
     }
 
     /**
