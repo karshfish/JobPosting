@@ -41,7 +41,7 @@
             <!-- IMAGE SIDE -->
             <div class="relative">
                 <div class="overflow-hidden shadow-lg rounded-bl-[200px] rounded-[20px] w-[30rem]">
-                    <img src="{{ asset('assets/hero.avif') }}" class="w-full h-[420px] object-cover" alt="Hero Image">
+                    <img src="{{ asset('assets/hero.jpg') }}" class="w-full h-[420px] object-cover" alt="Hero Image">
                 </div>
 
                 <!-- Curved Decoration -->

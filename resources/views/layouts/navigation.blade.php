@@ -27,16 +27,49 @@
             <div class="hidden sm:flex items-center gap-4">
 
                 <!-- Dark / Light Toggle -->
-                <button id="themeToggle" class="p-2 rounded-lg bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-gray-300 transition">
-                    <svg id="themeToggleLightIcon" class="h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z" />
-                    </svg>
-                    <svg id="themeToggleDarkIcon" class="h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20.354 15.354A9 9 0 118.646 3.646 9.003 9.003 0 0020.354 15.354z" />
-                    </svg>
-                </button>
+                <div class="flex items-center"
+     x-data="{ darkMode: localStorage.theme === 'dark' }"
+     x-init="
+        document.documentElement.classList.toggle('dark', darkMode);
+     "
+>
+    <button
+        @click="
+            darkMode = !darkMode;
+            localStorage.theme = darkMode ? 'dark' : 'light';
+            document.documentElement.classList.toggle('dark', darkMode);
+        "
+        class="inline-flex items-center justify-center p-2 rounded-full border border-slate-300 dark:border-slate-700
+               text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50
+               transition-all duration-200"
+        aria-label="Toggle dark mode"
+    >
+
+        <!-- Light Mode Icon (Sun) -->
+        <template x-if="!darkMode">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor"
+                 class="w-5 h-5 text-yellow-500">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 3v2.25M12 18.75V21M4.22 4.22l1.59 1.59M18.19 18.19l1.59 1.59M3 12h2.25M18.75 12H21M4.22 19.78l1.59-1.59M18.19 5.81l1.59-1.59M12 8.25A3.75 3.75 0 1 0 15.75 12 3.75 3.75 0 0 0 12 8.25Z" />
+            </svg>
+        </template>
+
+        <!-- Dark Mode Icon (Moon) -->
+        <template x-if="darkMode">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor"
+                 class="w-5 h-5 text-slate-300">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+            </svg>
+        </template>
+
+    </button>
+</div>
+
 
                 <!-- Profile / Auth Links -->
                 @auth
@@ -68,7 +101,11 @@
                                         default => null,
                                     };
                                 @endphp
-
+                                    <a href="{{ route('home') }}"
+                                        class="flex items-center gap-2 px-4 py-2 text-sm
+                   text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition">
+                                        🏠 <span>Home</span>
+                                    </a>
                                 @if ($dashboardRoute)
                                     <a href="{{ route($dashboardRoute) }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition">📊 Dashboard</a>
                                 @endif

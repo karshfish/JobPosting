@@ -78,39 +78,6 @@
     </section>
 
 
-    {{-- Mission & Vision --}}
-    <section class=" border-b border-gray-100 dark:border-slate-700 py-20 bg-gray-50 dark:bg-slate-900">
-        <div class="max-w-7xl mx-auto px-6">
-
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-12">
-                Our Mission & Vision
-            </h2>
-
-            <div class="grid md:grid-cols-2 gap-10">
-                {{-- Mission --}}
-                <div
-                    class="bg-gray-50 dark:bg-slate-900 p-8 rounded-3xl shadow-lg border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-xl font-semibold text-indigo-600 dark:text-indigo-400 mb-3">Our Mission</h3>
-                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                        To empower job seekers and employers through a transparent, supportive, and
-                        innovative hiring platform designed to create meaningful connections and life-changing
-                        opportunities.
-                    </p>
-                </div>
-
-                {{-- Vision --}}
-                <div
-                    class="bg-gray-50 dark:bg-slate-900 p-8 rounded-3xl shadow-lg border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-xl font-semibold text-indigo-600 dark:text-indigo-400 mb-3">Our Vision</h3>
-                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                        To become the most trusted hiring platform globally, where every individual
-                        finds the right place, and every company finds the right talent effortlessly.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     {{-- Values --}}
     <section
         class="py-20 bg-gray-50 border-b border-gray-100 dark:border-slate-700 dark:bg-slate-900">
@@ -151,48 +118,120 @@
         </div>
     </section>
 
-    {{-- Stats Section --}}
-    <section class="border-b border-gray-100 dark:border-slate-700 py-24 bg-gray-50 dark:bg-slate-900">
-        <div class="max-w-7xl mx-auto px-6 text-center">
+      <footer class="bg-gray-50 dark:bg-slate-900 text-gray-700 dark:text-gray-300 py-16">
+        <div class="max-w-7xl mx-auto px-6">
 
-            <!-- Section Header -->
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                Our Impact
-            </h2>
-            <p class="text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
-                Over the years, we've helped thousands of candidates and employers connect successfully.
-            </p>
+            <!-- Logo -->
+            <div class="mb-10 text-center md:text-left">
+                <div class="flex items-center justify-center md:justify-start space-x-2">
+                    <img src="{{ asset('assets/logo.jpg') }}" class="h-8 rounded w-auto" alt="Logo">
+                    <span class="text-gray-900 dark:text-white text-2xl font-semibold">Hireup</span>
+                </div>
+            </div>
 
-            <!-- Stats Grid -->
-            <div class="grid md:grid-cols-3 gap-10">
+            <!-- Footer Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10">
 
-                <div class="bg-gray-50 dark:bg-slate-900 p-8 rounded-3xl shadow hover:shadow-lg transition">
-                    <h3 class="text-5xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">12k+</h3>
-                    <p class="text-gray-600 dark:text-gray-300 text-lg font-medium">Jobs Posted</p>
-                    <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-                        Thousands of opportunities across different industries for candidates to find their dream jobs.
-                    </p>
+                <!-- Column 1 -->
+                <div>
+                    <h3 class="text-gray-900 dark:text-white font-semibold mb-4">How Hireup Works</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Home</a>
+                        </li>
+                        <li><a href="#"
+                                class="hover:text-blue-600 dark:hover:text-blue-400 transition">Pricing</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Safety</a>
+                        </li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Events</a>
+                        </li>
+                    </ul>
                 </div>
 
-                <div class="bg-gray-50 dark:bg-slate-900 p-8 rounded-3xl shadow hover:shadow-lg transition">
-                    <h3 class="text-5xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">40k+</h3>
-                    <p class="text-gray-600 dark:text-gray-300 text-lg font-medium">Candidates</p>
-                    <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-                        Talented job seekers have registered and successfully connected with companies worldwide.
-                    </p>
+                <!-- Column 2 -->
+                <div>
+                    <h3 class="text-gray-900 dark:text-white font-semibold mb-4">Find Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">For
+                                Individuals</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">For
+                                Support Coordinators</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">For
+                                Service Providers</a></li>
+                        <li><a href="#"
+                                class="hover:text-blue-600 dark:hover:text-blue-400 transition">Individualised Living
+                                Options</a></li>
+                    </ul>
                 </div>
 
-                <div class="bg-gray-50 dark:bg-slate-900 p-8 rounded-3xl shadow hover:shadow-lg transition">
-                    <h3 class="text-5xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">1.2k+</h3>
-                    <p class="text-gray-600 dark:text-gray-300 text-lg font-medium">Company Partners</p>
-                    <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-                        Businesses trust our platform to find the right talent efficiently and effortlessly.
-                    </p>
+                <!-- Column 3 -->
+                <div>
+                    <h3 class="text-gray-900 dark:text-white font-semibold mb-4">Support Near You</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Adelaide,
+                                SA</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Brisbane,
+                                QLD</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Melbourne,
+                                VIC</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Perth,
+                                WA</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Sydney,
+                                NSW</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Across
+                                Australia</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4 -->
+                <div>
+                    <h3 class="text-gray-900 dark:text-white font-semibold mb-4">Provide Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Become a
+                                Support Worker</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">The
+                                Hireup Difference</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Pay and
+                                Benefits</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Paid
+                                Training</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 5 -->
+                <div>
+                    <h3 class="text-gray-900 dark:text-white font-semibold mb-4">About Us</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Our
+                                Story</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Our
+                                Impact</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Annual
+                                Reports</a></li>
+                        <li><a href="#"
+                                class="hover:text-blue-600 dark:hover:text-blue-400 transition">Careers</a></li>
+                        <li><a href="#"
+                                class="hover:text-blue-600 dark:hover:text-blue-400 transition">Press</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 6 -->
+                <div>
+                    <h3 class="text-gray-900 dark:text-white font-semibold mb-4">Your Account</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#"
+                                class="hover:text-blue-600 dark:hover:text-blue-400 transition">Login</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Sign
+                                Up</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Hireup
+                                App</a></li>
+                        <li><a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Give
+                                feedback</a></li>
+                    </ul>
                 </div>
 
             </div>
         </div>
-    </section>
+    </footer>
 
 
 
