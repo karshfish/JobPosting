@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: jobposting-web
+    env: php
+    plan: free
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+      php artisan config:cache
+      php artisan route:cache
+      php artisan view:cache
+    startCommand: php -S 0.0.0.0:$PORT -t public public/index.php
